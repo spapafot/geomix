@@ -1,78 +1,232 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { useRouter } from "next/router";
+import { motion } from "framer-motion";
+import { BlurFade } from "@/components/ui/blur-fade";
+import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
+import { GridPattern } from "@/components/ui/grid-pattern";
+import { NumberTicker } from "@/components/ui/number-ticker";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const features = [
+  { icon: "🗺️", title: "Διαδραστικός Χάρτης",      desc: "Κάνε κλικ απευθείας στον χάρτη και μάθε τη θέση κάθε περιοχής." },
+  { icon: "📚", title: "Εκπαιδευτικό Περιεχόμενο",  desc: "Κατάλληλο για μαθητές Δημοτικού, Γυμνασίου και Λυκείου." },
+  { icon: "🎯", title: "Άμεση Ανατροφοδότηση",       desc: "Μάθαινε από τα λάθη σου με άμεση εμφάνιση της σωστής απάντησης." },
+  { icon: "🏆", title: "Παρακολούθηση Σκορ",         desc: "Δες πόσες ερωτήσεις απάντησες σωστά και βελτιώσου συνεχώς." },
+];
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const stats = [
+  { value: 45,  suffix: "",  label: "Χώρες Ευρώπης" },
+  { value: 74,  suffix: "+", label: "Νομοί Ελλάδας" },
+  { value: 100, suffix: "%", label: "Δωρεάν"         },
+];
 
-export default function Home() {
+interface GameMode {
+  id: string;
+  icon: string;
+  title: string;
+  subtitle: string;
+  desc: string;
+  route: string;
+  badge?: string;
+  available: boolean;
+  color: string;
+  borderColor: string;
+  glowColor: string;
+  playColor: string;
+}
+
+const GAMES: GameMode[] = [
+  {
+    id: "peripheries",
+    icon: "🗺️",
+    title: "Περιφέρειες",
+    subtitle: "13 ερωτήσεις",
+    desc: "Εντόπισε τις 13 περιφέρειες της Ελλάδας στον χάρτη. Ιδανικό για αρχάριους.",
+    route: "/quiz",
+    available: true,
+    color: "from-blue-600/20 to-blue-800/10",
+    borderColor: "border-blue-500/30 hover:border-blue-400/60",
+    glowColor: "rgba(59,130,246,0.2)",
+    playColor: "text-blue-400",
+  },
+  {
+    id: "nomoi",
+    icon: "📍",
+    title: "Νομοί",
+    subtitle: "74 ερωτήσεις",
+    desc: "Βρες τους 74 νομούς της Ελλάδας. Δοκιμή για προχωρημένους.",
+    route: "/quiz/nomoi",
+    available: true,
+    color: "from-violet-600/20 to-violet-800/10",
+    borderColor: "border-violet-500/30 hover:border-violet-400/60",
+    glowColor: "rgba(139,92,246,0.2)",
+    playColor: "text-violet-400",
+  },
+  {
+    id: "europe",
+    icon: "🌍",
+    title: "Χώρες Ευρώπης",
+    subtitle: "45 ερωτήσεις",
+    desc: "Εντόπισε τις 45 χώρες της Ευρώπης στον χάρτη. Από την Πορτογαλία ως την Τουρκία.",
+    route: "/quiz/europe",
+    available: true,
+    color: "from-emerald-600/20 to-emerald-800/10",
+    borderColor: "border-emerald-500/30 hover:border-emerald-400/60",
+    glowColor: "rgba(16,185,129,0.2)",
+    playColor: "text-emerald-400",
+  },
+  {
+    id: "europe-capitals",
+    icon: "🏛️",
+    title: "Πρωτεύουσες Ευρώπης",
+    subtitle: "45 ερωτήσεις",
+    desc: "Ξέρεις σε ποια χώρα βρίσκεται η Βιέννη ή η Μπρατισλάβα; Δοκίμασε το!",
+    route: "/quiz/europe-capitals",
+    available: true,
+    color: "from-orange-600/20 to-orange-800/10",
+    borderColor: "border-orange-500/30 hover:border-orange-400/60",
+    glowColor: "rgba(249,115,22,0.2)",
+    playColor: "text-orange-400",
+  },
+];
+
+export default function LandingPage() {
+  const router = useRouter();
+
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black`}
-    >
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the index.tsx file.
+    <div className="relative min-h-screen bg-slate-950 text-white overflow-hidden">
+      <GridPattern width={50} height={50} className="absolute inset-0 opacity-40" />
+      <div className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-blue-600/20 blur-[120px]" />
+      <div className="pointer-events-none absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-cyan-500/10 blur-[120px]" />
+
+      <div className="relative z-10 flex flex-col items-center px-6 py-20 max-w-4xl mx-auto">
+
+        {/* Badge */}
+        <BlurFade delay={0.1}>
+          <div className="mb-6 flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-medium text-blue-300 backdrop-blur-sm">
+            <span>🇬🇷</span>
+            <span>Εκπαιδευτική Πλατφόρμα Γεωγραφίας</span>
+          </div>
+        </BlurFade>
+
+        {/* Hero */}
+        <BlurFade delay={0.2}>
+          <h1 className="text-center text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-6">
+            Μάθε τη Γεωγραφία{" "}
+            <br />
+            <AnimatedGradientText className="text-5xl sm:text-6xl font-extrabold">
+              της Ελλάδας
+            </AnimatedGradientText>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+        </BlurFade>
+
+        <BlurFade delay={0.3}>
+          <p className="text-center text-lg text-slate-400 max-w-xl mb-14 leading-relaxed">
+            Ένα δωρεάν, διαδραστικό κουίζ γεωγραφίας για μαθητές όλων των ηλικιών.
+            Διάλεξε τύπο παιχνιδιού και ξεκίνα!
           </p>
+        </BlurFade>
+
+        {/* ── Game selection ── */}
+        <BlurFade delay={0.4} className="w-full">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="flex-1 h-px bg-slate-800" />
+            <span className="text-xs text-slate-500 uppercase tracking-widest whitespace-nowrap">Διάλεξε παιχνίδι</span>
+            <div className="flex-1 h-px bg-slate-800" />
+          </div>
+        </BlurFade>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-20">
+          {GAMES.map((game, i) => (
+            <BlurFade key={game.id} delay={0.45 + i * 0.08} inView>
+              <motion.button
+                onClick={() => game.available && router.push(game.route)}
+                whileHover={game.available ? { y: -4, boxShadow: `0 0 40px 0 ${game.glowColor}` } : {}}
+                whileTap={game.available ? { scale: 0.98 } : {}}
+                transition={{ duration: 0.2 }}
+                className={`
+                  relative w-full text-left rounded-2xl border bg-gradient-to-br p-5
+                  transition-colors duration-200
+                  ${game.color} ${game.borderColor}
+                  ${game.available ? "cursor-pointer" : "cursor-default opacity-60"}
+                `}
+              >
+                {/* Badge */}
+                {game.badge && (
+                  <span className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-widest bg-slate-700/80 text-slate-300 px-2 py-0.5 rounded-full">
+                    {game.badge}
+                  </span>
+                )}
+
+                <div className="flex items-start gap-4">
+                  <span className="text-3xl shrink-0 mt-0.5">{game.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-2 mb-1">
+                      <h3 className="font-bold text-slate-100 text-base">{game.title}</h3>
+                      <span className="text-xs text-slate-500">{game.subtitle}</span>
+                    </div>
+                    <p className="text-sm text-slate-400 leading-relaxed">{game.desc}</p>
+                  </div>
+                </div>
+
+                {game.available && (
+                  <div className={`mt-4 flex items-center gap-1.5 text-xs font-semibold ${game.playColor}`}>
+                    <span>Παίξε τώρα</span>
+                    <span>→</span>
+                  </div>
+                )}
+              </motion.button>
+            </BlurFade>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs/pages/getting-started?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Stats */}
+        <BlurFade delay={0.7} inView>
+          <div className="grid grid-cols-3 gap-10 text-center mb-20">
+            {stats.map(({ value, suffix, label }) => (
+              <div key={label} className="flex flex-col items-center gap-1">
+                <span className="text-3xl font-extrabold text-white">
+                  <NumberTicker value={value} delay={0.8} />
+                  {suffix}
+                </span>
+                <span className="text-xs text-slate-500 uppercase tracking-widest">{label}</span>
+              </div>
+            ))}
+          </div>
+        </BlurFade>
+
+        {/* Features */}
+        <BlurFade delay={0.75} inView className="w-full">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="flex-1 h-px bg-slate-800" />
+            <span className="text-xs text-slate-600 uppercase tracking-widest whitespace-nowrap">Γιατί να το χρησιμοποιήσεις</span>
+            <div className="flex-1 h-px bg-slate-800" />
+          </div>
+        </BlurFade>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
+          {features.map((f, i) => (
+            <BlurFade key={f.title} delay={0.8 + i * 0.08} inView>
+              <motion.div
+                whileHover={{ y: -3, boxShadow: "0 0 24px 0 rgba(59,130,246,0.12)" }}
+                transition={{ duration: 0.2 }}
+                className="rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm p-6 flex gap-4"
+              >
+                <span className="text-2xl shrink-0">{f.icon}</span>
+                <div>
+                  <h3 className="font-semibold text-slate-100 mb-1">{f.title}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
+                </div>
+              </motion.div>
+            </BlurFade>
+          ))}
         </div>
-      </main>
+
+        {/* Footer */}
+        <BlurFade delay={1.0} inView>
+          <footer className="mt-20 text-center text-xs text-slate-700">
+            <p>© {new Date().getFullYear()} GeoMix · Εκπαιδευτική πλατφόρμα γεωγραφίας · Δωρεάν για όλους</p>
+          </footer>
+        </BlurFade>
+      </div>
     </div>
   );
 }

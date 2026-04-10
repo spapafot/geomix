@@ -139,7 +139,7 @@ export default function MapQuiz({
     const map = L.map(mapContainerRef.current, {
       center: [39, 23],
       zoom: 4,
-      zoomSnap: 0,   // allow fractional zoom so fitBounds fills the container exactly
+      zoomSnap: 0, // allow fractional zoom so fitBounds fills the container exactly
       zoomControl: false,
       attributionControl: false,
       scrollWheelZoom: false,
@@ -296,7 +296,7 @@ export default function MapQuiz({
         {/* Back button */}
         <button
           onClick={() => router.push("/")}
-          className="absolute top-4 left-4 z-[1000] flex items-center gap-1.5 text-xs text-slate-400 hover:text-white bg-slate-900/80 backdrop-blur-sm border border-slate-700/60 rounded-lg px-3 py-1.5 transition-colors"
+          className="absolute top-4 left-4 z-1000 flex items-center gap-1.5 text-xs text-slate-400 hover:text-white bg-slate-900/80 backdrop-blur-sm border border-slate-700/60 rounded-lg px-3 py-1.5 transition-colors"
         >
           ← Αρχική
         </button>
@@ -319,7 +319,7 @@ export default function MapQuiz({
           </div>
           <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
             <motion.div
-              className={`h-full bg-gradient-to-r ${accent.bar} rounded-full`}
+              className={`h-full bg-linear-to-r ${accent.bar} rounded-full`}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.4, ease: "easeOut" }}
             />
@@ -445,7 +445,7 @@ export default function MapQuiz({
           <AdSenseSlot
             slot="1234567890"
             format="rectangle"
-            className="h-[120px] w-full"
+            className="h-30 w-full"
           />
         </div>
       </div>

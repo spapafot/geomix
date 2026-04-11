@@ -247,6 +247,7 @@ export default function MapQuiz({
 
   const handleNext = () => {
     if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
+    applyStyles(null, "idle");
     if (currentIndexRef.current + 1 >= questionsRef.current.length) {
       setFinished(true);
       return;
@@ -254,8 +255,14 @@ export default function MapQuiz({
     setCurrentIndex((i) => i + 1);
     setFeedback("idle");
     setAnswered(false);
-    applyStyles(null, "idle");
   };
+
+  // Belt-and-suspenders: reset map styles after React renders the new question,
+  // catching any timing edge case between handleNext and the re-render.
+  useEffect(() => {
+    applyStyles(null, "idle");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex]);
 
   // Start auto-advance timer whenever the user answers
   useEffect(() => {
@@ -441,13 +448,13 @@ export default function MapQuiz({
         </div>
 
         {/* AdSense */}
-        <div className="px-4 pb-4 shrink-0">
+        {/* <div className="px-4 pb-4 shrink-0">
           <AdSenseSlot
             slot="1234567890"
             format="rectangle"
             className="h-30 w-full"
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

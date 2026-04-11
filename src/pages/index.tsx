@@ -3,26 +3,11 @@ import { motion } from "framer-motion";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 import { GridPattern } from "@/components/ui/grid-pattern";
-import { NumberTicker } from "@/components/ui/number-ticker";
-
-const features = [
-  { icon: "🗺️", title: "Διαδραστικός Χάρτης",      desc: "Κάνε κλικ απευθείας στον χάρτη και μάθε τη θέση κάθε περιοχής." },
-  { icon: "📚", title: "Εκπαιδευτικό Περιεχόμενο",  desc: "Κατάλληλο για μαθητές Δημοτικού, Γυμνασίου και Λυκείου." },
-  { icon: "🎯", title: "Άμεση Ανατροφοδότηση",       desc: "Μάθαινε από τα λάθη σου με άμεση εμφάνιση της σωστής απάντησης." },
-  { icon: "🏆", title: "Παρακολούθηση Σκορ",         desc: "Δες πόσες ερωτήσεις απάντησες σωστά και βελτιώσου συνεχώς." },
-];
-
-const stats = [
-  { value: 45,  suffix: "",  label: "Χώρες Ευρώπης" },
-  { value: 74,  suffix: "+", label: "Νομοί Ελλάδας" },
-  { value: 100, suffix: "%", label: "Δωρεάν"         },
-];
 
 interface GameMode {
   id: string;
   icon: string;
   title: string;
-  subtitle: string;
   desc: string;
   route: string;
   badge?: string;
@@ -38,8 +23,7 @@ const GAMES: GameMode[] = [
     id: "peripheries",
     icon: "🗺️",
     title: "Περιφέρειες",
-    subtitle: "13 ερωτήσεις",
-    desc: "Εντόπισε τις 13 περιφέρειες της Ελλάδας στον χάρτη. Ιδανικό για αρχάριους.",
+    desc: "Εντόπισε τις περιφέρειες της Ελλάδας στον χάρτη. Ιδανικό για αρχάριους.",
     route: "/quiz",
     available: true,
     color: "from-blue-600/20 to-blue-800/10",
@@ -51,8 +35,7 @@ const GAMES: GameMode[] = [
     id: "nomoi",
     icon: "📍",
     title: "Νομοί",
-    subtitle: "74 ερωτήσεις",
-    desc: "Βρες τους 74 νομούς της Ελλάδας. Δοκιμή για προχωρημένους.",
+    desc: "Βρες τους νομούς της Ελλάδας στον χάρτη. Δοκιμή για προχωρημένους.",
     route: "/quiz/nomoi",
     available: true,
     color: "from-violet-600/20 to-violet-800/10",
@@ -64,8 +47,7 @@ const GAMES: GameMode[] = [
     id: "europe",
     icon: "🌍",
     title: "Χώρες Ευρώπης",
-    subtitle: "45 ερωτήσεις",
-    desc: "Εντόπισε τις 45 χώρες της Ευρώπης στον χάρτη. Από την Πορτογαλία ως την Τουρκία.",
+    desc: "Εντόπισε τις χώρες της Ευρώπης στον χάρτη. Από την Πορτογαλία ως την Τουρκία.",
     route: "/quiz/europe",
     available: true,
     color: "from-emerald-600/20 to-emerald-800/10",
@@ -77,7 +59,6 @@ const GAMES: GameMode[] = [
     id: "europe-capitals",
     icon: "🏛️",
     title: "Πρωτεύουσες Ευρώπης",
-    subtitle: "45 ερωτήσεις",
     desc: "Ξέρεις σε ποια χώρα βρίσκεται η Βιέννη ή η Μπρατισλάβα; Δοκίμασε το!",
     route: "/quiz/europe-capitals",
     available: true,
@@ -134,7 +115,7 @@ export default function LandingPage() {
           </div>
         </BlurFade>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
           {GAMES.map((game, i) => (
             <BlurFade key={game.id} delay={0.45 + i * 0.08} inView>
               <motion.button
@@ -161,7 +142,6 @@ export default function LandingPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline gap-2 mb-1">
                       <h3 className="font-bold text-slate-100 text-base">{game.title}</h3>
-                      <span className="text-xs text-slate-500">{game.subtitle}</span>
                     </div>
                     <p className="text-sm text-slate-400 leading-relaxed">{game.desc}</p>
                   </div>
@@ -178,54 +158,10 @@ export default function LandingPage() {
           ))}
         </div>
 
-        {/* Stats */}
-        <BlurFade delay={0.7} inView>
-          <div className="grid grid-cols-3 gap-10 text-center mb-20">
-            {stats.map(({ value, suffix, label }) => (
-              <div key={label} className="flex flex-col items-center gap-1">
-                <span className="text-3xl font-extrabold text-white">
-                  <NumberTicker value={value} delay={0.8} />
-                  {suffix}
-                </span>
-                <span className="text-xs text-slate-500 uppercase tracking-widest">{label}</span>
-              </div>
-            ))}
-          </div>
-        </BlurFade>
+        <footer className="mt-16 text-center text-xs text-slate-700">
+          <p>© {new Date().getFullYear()} GeoMix · Εκπαιδευτική πλατφόρμα γεωγραφίας · Δωρεάν για όλους</p>
+        </footer>
 
-        {/* Features */}
-        <BlurFade delay={0.75} inView className="w-full">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="flex-1 h-px bg-slate-800" />
-            <span className="text-xs text-slate-600 uppercase tracking-widest whitespace-nowrap">Γιατί να το χρησιμοποιήσεις</span>
-            <div className="flex-1 h-px bg-slate-800" />
-          </div>
-        </BlurFade>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
-          {features.map((f, i) => (
-            <BlurFade key={f.title} delay={0.8 + i * 0.08} inView>
-              <motion.div
-                whileHover={{ y: -3, boxShadow: "0 0 24px 0 rgba(59,130,246,0.12)" }}
-                transition={{ duration: 0.2 }}
-                className="rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm p-6 flex gap-4"
-              >
-                <span className="text-2xl shrink-0">{f.icon}</span>
-                <div>
-                  <h3 className="font-semibold text-slate-100 mb-1">{f.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
-                </div>
-              </motion.div>
-            </BlurFade>
-          ))}
-        </div>
-
-        {/* Footer */}
-        <BlurFade delay={1.0} inView>
-          <footer className="mt-20 text-center text-xs text-slate-700">
-            <p>© {new Date().getFullYear()} GeoMix · Εκπαιδευτική πλατφόρμα γεωγραφίας · Δωρεάν για όλους</p>
-          </footer>
-        </BlurFade>
       </div>
     </div>
   );

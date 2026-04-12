@@ -60,6 +60,7 @@ export default function AsiaCapitalsQuizPage() {
         title="GeoMix — Πρωτεύουσες Ασίας"
         flag="🏛️"
         accentColor="indigo"
+        projection="naturalEarth"
       />
     </>
   );

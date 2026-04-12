@@ -60,6 +60,7 @@ export default function AfricaFlagsQuizPage() {
         title="GeoMix — Σημαίες Αφρικής"
         flag="🚩"
         accentColor="red"
+        projection="azimuthalEqualArea"
       />
     </>
   );

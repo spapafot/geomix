@@ -60,6 +60,7 @@ export default function AfricaQuizPage() {
         title="GeoMix — Αφρική"
         flag="🌍"
         accentColor="amber"
+        projection="azimuthalEqualArea"
       />
     </>
   );

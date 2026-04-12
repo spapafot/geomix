@@ -60,6 +60,7 @@ export default function AsiaQuizPage() {
         title="GeoMix — Ασία"
         flag="🌏"
         accentColor="sky"
+        projection="naturalEarth"
       />
     </>
   );

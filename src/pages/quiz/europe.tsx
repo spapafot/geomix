@@ -60,6 +60,7 @@ export default function EuropeQuizPage() {
         title="GeoMix — Ευρώπη"
         flag="🌍"
         accentColor="emerald"
+        projection="azimuthalEqualArea"
       />
     </>
   );

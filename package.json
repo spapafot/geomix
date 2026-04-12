@@ -10,8 +10,10 @@
     "deploy_frontend": "bash ./scripts/deploy_frontend"
   },
   "dependencies": {
+    "@types/d3-geo": "^3.1.0",
     "@types/leaflet": "^1.9.21",
     "clsx": "^2.1.1",
+    "d3-geo": "^3.1.1",
     "framer-motion": "^12.38.0",
     "leaflet": "^1.9.4",
     "next": "16.2.3",

@@ -60,6 +60,7 @@ export default function AfricaCapitalsQuizPage() {
         title="GeoMix — Πρωτεύουσες Αφρικής"
         flag="🏛️"
         accentColor="orange"
+        projection="azimuthalEqualArea"
       />
     </>
   );

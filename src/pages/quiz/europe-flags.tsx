@@ -60,6 +60,7 @@ export default function EuropeFlagsQuizPage() {
         title="GeoMix — Σημαίες Ευρώπης"
         flag="🚩"
         accentColor="yellow"
+        projection="azimuthalEqualArea"
       />
     </>
   );

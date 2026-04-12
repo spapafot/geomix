@@ -6,15 +6,15 @@ import type { QuizData, RegionProperties } from "@/lib/loadData";
 
 const MapQuiz = dynamic(() => import("@/components/MapQuiz"), { ssr: false });
 
-export default function NomoiQuizPage() {
+export default function NorthAmericaCapitalsQuizPage() {
   const [geojson, setGeojson] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry, RegionProperties> | null>(null);
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
-      loadGeoJSON("greece-nomoi.geojson"),
-      loadQuestions("questions-nomoi.json"),
+      loadGeoJSON("north-america.geojson"),
+      loadQuestions("questions-north-america-capitals.json"),
     ])
       .then(([geo, quiz]) => {
         setGeojson(geo);
@@ -36,7 +36,7 @@ export default function NomoiQuizPage() {
       <div className="flex items-center justify-center h-screen bg-slate-950 text-slate-400">
         <div className="text-center">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-violet-400 mx-auto mb-3" />
-          <p className="text-sm">Φόρτωση νομών…</p>
+          <p className="text-sm">Φόρτωση πρωτευουσών Βόρειας Αμερικής…</p>
         </div>
       </div>
     );
@@ -45,19 +45,20 @@ export default function NomoiQuizPage() {
   return (
     <>
       <Head>
-        <title>Νομοί Ελλάδας — Κουίζ Γεωγραφίας | GeoMix</title>
-        <meta name="description" content="Βρες τους νομούς της Ελλάδας στον χάρτη. Δοκιμασία για προχωρημένους με δεκάδες νομούς από τη Θράκη ως την Κρήτη." />
-        <meta name="keywords" content="νομοί ελλάδας, κουίζ νομών, γεωγραφία ελλάδας, νομός, εκπαιδευτικό παιχνίδι, διαδραστικός χάρτης" />
-        <meta property="og:title" content="Νομοί Ελλάδας — Κουίζ Γεωγραφίας | GeoMix" />
-        <meta property="og:description" content="Βρες τους νομούς της Ελλάδας στον χάρτη. Δοκιμασία για προχωρημένους." />
+        <title>Πρωτεύουσες Βόρειας Αμερικής — Κουίζ Γεωγραφίας | GeoMix</title>
+        <meta name="description" content="Ξέρεις σε ποια χώρα βρίσκεται η Αβάνα ή το Σαν Χοσέ; Βρες τις πρωτεύουσες της Βόρειας Αμερικής στον χάρτη." />
+        <meta name="keywords" content="πρωτεύουσες βόρειας αμερικής, κουίζ βόρειας αμερικής, γεωγραφία βόρειας αμερικής, εκπαιδευτικό παιχνίδι" />
+        <meta property="og:title" content="Πρωτεύουσες Βόρειας Αμερικής — Κουίζ Γεωγραφίας | GeoMix" />
+        <meta property="og:description" content="Βρες τις πρωτεύουσες της Βόρειας Αμερικής στον χάρτη. Δωρεάν και διαδραστικό." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
-        <link rel="canonical" href="https://geomix.gr/quiz/nomoi" />
+        <link rel="canonical" href="https://geomix.gr/quiz/north-america-capitals" />
       </Head>
       <MapQuiz
         geojson={geojson}
         questions={quizData.questions}
-        title="GeoMix — Νομοί"
+        title="GeoMix — Πρωτεύουσες Βόρειας Αμερικής"
+        flag="🏛️"
         accentColor="violet"
       />
     </>

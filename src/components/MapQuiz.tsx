@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { AdSenseSlot } from "@/components/AdSenseSlot";
 import type { RegionProperties, Question } from "@/lib/loadData";
 
-type AccentColor = "blue" | "violet" | "emerald";
+type AccentColor = "blue" | "violet" | "emerald" | "yellow" | "cyan" | "amber" | "orange" | "red" | "sky" | "indigo" | "rose" | "lime" | "teal" | "pink";
 
 interface MapQuizProps {
   geojson: GeoJSON.FeatureCollection<GeoJSON.Geometry, RegionProperties>;
@@ -21,6 +21,7 @@ interface MapQuizProps {
 }
 
 type FeedbackState = "idle" | "correct" | "wrong";
+type AppMode = "quiz" | "relax";
 
 const DEFAULT_STYLE: PathOptions = {
   color: "#94a3b8",
@@ -41,6 +42,12 @@ const WRONG_STYLE: PathOptions = {
   color: "#b91c1c",
   weight: 2,
 };
+const RELAX_SELECTED_STYLE: PathOptions = {
+  fillColor: "#8b5cf6",
+  fillOpacity: 0.85,
+  color: "#6d28d9",
+  weight: 2,
+};
 
 const ACCENT: Record<AccentColor, { bar: string; btn: string }> = {
   blue: {
@@ -54,6 +61,50 @@ const ACCENT: Record<AccentColor, { bar: string; btn: string }> = {
   emerald: {
     bar: "from-emerald-500 to-teal-400",
     btn: "bg-emerald-600 hover:bg-emerald-500",
+  },
+  yellow: {
+    bar: "from-yellow-500 to-amber-400",
+    btn: "bg-yellow-600 hover:bg-yellow-500",
+  },
+  cyan: {
+    bar: "from-cyan-500 to-sky-400",
+    btn: "bg-cyan-600 hover:bg-cyan-500",
+  },
+  amber: {
+    bar: "from-amber-500 to-yellow-400",
+    btn: "bg-amber-600 hover:bg-amber-500",
+  },
+  orange: {
+    bar: "from-orange-500 to-amber-400",
+    btn: "bg-orange-600 hover:bg-orange-500",
+  },
+  red: {
+    bar: "from-red-500 to-rose-400",
+    btn: "bg-red-600 hover:bg-red-500",
+  },
+  sky: {
+    bar: "from-sky-500 to-cyan-400",
+    btn: "bg-sky-600 hover:bg-sky-500",
+  },
+  indigo: {
+    bar: "from-indigo-500 to-violet-400",
+    btn: "bg-indigo-600 hover:bg-indigo-500",
+  },
+  rose: {
+    bar: "from-rose-500 to-pink-400",
+    btn: "bg-rose-600 hover:bg-rose-500",
+  },
+  lime: {
+    bar: "from-lime-500 to-green-400",
+    btn: "bg-lime-600 hover:bg-lime-500",
+  },
+  teal: {
+    bar: "from-teal-500 to-cyan-400",
+    btn: "bg-teal-600 hover:bg-teal-500",
+  },
+  pink: {
+    bar: "from-pink-500 to-rose-400",
+    btn: "bg-pink-600 hover:bg-pink-500",
   },
 };
 
@@ -70,11 +121,26 @@ export default function MapQuiz({
   const mapContainerRef = useRef<HTMLDivElement>(null); // the leaflet root (absolute inset-0)
   const mapWrapperRef = useRef<HTMLDivElement>(null); // the flex-1 parent with real height
 
+  const initialMode: AppMode =
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("mode") === "relax"
+      ? "relax"
+      : "quiz";
+
+  const [mode, setMode] = useState<AppMode>(initialMode);
+  const modeRef = useRef<AppMode>(initialMode);
+  modeRef.current = mode;
+
+  const [relaxSelectedId, setRelaxSelectedId] = useState<string | null>(null);
+  const relaxSelectedIdRef = useRef<string | null>(null);
+  relaxSelectedIdRef.current = relaxSelectedId;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState<FeedbackState>("idle");
   const [finished, setFinished] = useState(false);
   const [answered, setAnswered] = useState(false);
+  const [lastClickedId, setLastClickedId] = useState<string | null>(null);
   const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Track container size so we can re-fit bounds when it changes
@@ -125,6 +191,35 @@ export default function MapQuiz({
         l.setStyle(DEFAULT_STYLE);
       }
     });
+  };
+
+  const applyRelaxStyle = (selectedId: string | null) => {
+    geoLayerRef.current?.eachLayer((layer) => {
+      const l = layer as Layer & {
+        feature?: GeoJSON.Feature<GeoJSON.Geometry, RegionProperties>;
+        setStyle: (s: PathOptions) => void;
+        bringToFront: () => void;
+      };
+      if (!l.feature) return;
+      if (l.feature.properties.id === selectedId) {
+        l.setStyle(RELAX_SELECTED_STYLE);
+        l.bringToFront();
+      } else {
+        l.setStyle(DEFAULT_STYLE);
+      }
+    });
+  };
+
+  const switchMode = (next: AppMode) => {
+    if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
+    setMode(next);
+    setRelaxSelectedId(null);
+    applyStyles(null, "idle");
+    if (next === "quiz") {
+      setFeedback("idle");
+      setAnswered(false);
+      setLastClickedId(null);
+    }
   };
 
   // Init map once
@@ -206,12 +301,29 @@ export default function MapQuiz({
         };
         featureLayer.on({
           mouseover: () => {
+            if (modeRef.current === "relax") {
+              if (feature.properties.id !== relaxSelectedIdRef.current)
+                fl.setStyle(HOVER_STYLE);
+              return;
+            }
             if (!answeredRef.current) fl.setStyle(HOVER_STYLE);
           },
           mouseout: () => {
+            if (modeRef.current === "relax") {
+              if (feature.properties.id !== relaxSelectedIdRef.current)
+                fl.setStyle(DEFAULT_STYLE);
+              return;
+            }
             if (!answeredRef.current) fl.setStyle(DEFAULT_STYLE);
           },
           click: () => {
+            if (modeRef.current === "relax") {
+              const clickedId = feature.properties.id;
+              relaxSelectedIdRef.current = clickedId;
+              setRelaxSelectedId(clickedId);
+              applyRelaxStyle(clickedId);
+              return;
+            }
             if (answeredRef.current) return;
             const clickedId = feature.properties.id;
             const correctId =
@@ -220,8 +332,8 @@ export default function MapQuiz({
             answeredRef.current = true;
             setAnswered(true);
             setFeedback(isCorrect ? "correct" : "wrong");
+            setLastClickedId(clickedId);
             if (isCorrect) setScore((s) => s + 1);
-            // Always show clicked region + correct region on map
             applyStyles(
               clickedId,
               isCorrect ? "correct" : "wrong",
@@ -243,7 +355,7 @@ export default function MapQuiz({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [geojson]);
 
-  const AUTO_ADVANCE_MS = 3000;
+  const AUTO_ADVANCE_MS = 5000;
 
   const handleNext = () => {
     if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
@@ -255,6 +367,7 @@ export default function MapQuiz({
     setCurrentIndex((i) => i + 1);
     setFeedback("idle");
     setAnswered(false);
+    setLastClickedId(null);
   };
 
   // Belt-and-suspenders: reset map styles after React renders the new question,
@@ -280,6 +393,7 @@ export default function MapQuiz({
     setFeedback("idle");
     setAnswered(false);
     setFinished(false);
+    setLastClickedId(null);
     applyStyles(null, "idle");
   };
 
@@ -320,21 +434,110 @@ export default function MapQuiz({
                 {title}
               </span>
             </div>
-            <span className="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded-full">
-              {score} / {questions.length}
-            </span>
+            {mode === "quiz" && (
+              <span className="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded-full">
+                {score} / {questions.length}
+              </span>
+            )}
           </div>
-          <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-            <motion.div
-              className={`h-full bg-linear-to-r ${accent.bar} rounded-full`}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            />
+
+          {/* Mode toggle */}
+          <div className="flex gap-1.5 mb-3">
+            <button
+              onClick={() => switchMode("quiz")}
+              className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+                mode === "quiz"
+                  ? `${accent.btn} text-white`
+                  : "bg-slate-800 text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              🎯 Κουίζ
+            </button>
+            <button
+              onClick={() => switchMode("relax")}
+              className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+                mode === "relax"
+                  ? "bg-violet-600 hover:bg-violet-500 text-white"
+                  : "bg-slate-800 text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              🔍 Εξερεύνηση
+            </button>
           </div>
+
+          {mode === "quiz" && (
+            <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+              <motion.div
+                className={`h-full bg-linear-to-r ${accent.bar} rounded-full`}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              />
+            </div>
+          )}
         </div>
 
+        {/* Relax panel */}
+        {mode === "relax" && (
+          <div className="flex-1 flex flex-col px-5 py-5 overflow-y-auto">
+            <AnimatePresence mode="wait">
+              {relaxSelectedId ? (
+                (() => {
+                  const feat = geojson.features.find(
+                    (f) => f.properties.id === relaxSelectedId,
+                  );
+                  const p = feat?.properties;
+                  return (
+                    <motion.div
+                      key={relaxSelectedId}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex flex-col gap-4"
+                    >
+                      {p?.iso2 && (
+                        <img
+                          src={`/flags/4x3/${p.iso2}.svg`}
+                          alt={p.name}
+                          className="h-20 w-auto rounded-lg shadow-lg border border-slate-700/60 self-start"
+                        />
+                      )}
+                      <div>
+                        <h2 className="text-2xl font-bold text-white leading-tight">
+                          {p?.name}
+                        </h2>
+                        {p?.capital && (
+                          <div className="flex items-center gap-2 mt-2 text-slate-300 text-sm">
+                            <span>🏛️</span>
+                            <span>{p.capital}</span>
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-600 mt-auto">
+                        Κάνε κλικ σε άλλη περιοχή για να συνεχίσεις
+                      </p>
+                    </motion.div>
+                  );
+                })()
+              ) : (
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex-1 flex flex-col items-center justify-center text-center gap-3 h-full"
+                >
+                  <span className="text-4xl">🗺️</span>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Κάνε κλικ σε μια περιοχή για να δεις το όνομα, τη σημαία και την πρωτεύουσά της
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+
         {/* Question / Result */}
-        <div className="flex-1 flex flex-col px-5 py-5 gap-4 overflow-y-auto">
+        {mode === "quiz" && <div className="flex-1 flex flex-col px-5 py-5 gap-4 overflow-y-auto">
           <AnimatePresence mode="wait">
             {finished ? (
               <motion.div
@@ -389,6 +592,13 @@ export default function MapQuiz({
                 <p className="text-lg font-semibold text-slate-100 leading-snug">
                   {currentQuestion.prompt}
                 </p>
+                {currentQuestion.image_url && (
+                  <img
+                    src={currentQuestion.image_url}
+                    alt="flag"
+                    className="h-12 w-auto rounded shadow-md border border-slate-700/60 self-start"
+                  />
+                )}
                 <p className="text-xs text-slate-500">Κάνε κλικ στον χάρτη</p>
               </motion.div>
             )}
@@ -421,6 +631,28 @@ export default function MapQuiz({
                   </span>
                 </div>
 
+                {/* Answer breakdown on wrong */}
+                {feedback === "wrong" && lastClickedId && (
+                  <div className="flex flex-col gap-1.5 text-xs border-t border-red-500/20 pt-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className="text-slate-500 shrink-0 w-32">
+                        Απάντησες:
+                      </span>
+                      <span className="text-red-300 font-medium">
+                        {getRegionName(lastClickedId)}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-slate-500 shrink-0 w-32">
+                        Σωστή απάντηση:
+                      </span>
+                      <span className="text-green-300 font-medium">
+                        {getRegionName(currentQuestion.answer)}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                 {/* Auto-advance bar — click to skip */}
                 <button
                   onClick={handleNext}
@@ -445,7 +677,7 @@ export default function MapQuiz({
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </div>}
 
         {/* AdSense */}
         {/* <div className="px-4 pb-4 shrink-0">

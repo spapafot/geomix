@@ -6,15 +6,15 @@ import type { QuizData, RegionProperties } from "@/lib/loadData";
 
 const MapQuiz = dynamic(() => import("@/components/MapQuiz"), { ssr: false });
 
-export default function EuropeQuizPage() {
+export default function AfricaQuizPage() {
   const [geojson, setGeojson] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry, RegionProperties> | null>(null);
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
-      loadGeoJSON("europe.geojson"),
-      loadQuestions("questions-europe.json"),
+      loadGeoJSON("africa.geojson"),
+      loadQuestions("questions-africa.json"),
     ])
       .then(([geo, quiz]) => {
         setGeojson(geo);
@@ -35,8 +35,8 @@ export default function EuropeQuizPage() {
     return (
       <div className="flex items-center justify-center h-screen bg-slate-950 text-slate-400">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-400 mx-auto mb-3" />
-          <p className="text-sm">Φόρτωση χάρτη Ευρώπης…</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-amber-400 mx-auto mb-3" />
+          <p className="text-sm">Φόρτωση χάρτη Αφρικής…</p>
         </div>
       </div>
     );
@@ -45,21 +45,21 @@ export default function EuropeQuizPage() {
   return (
     <>
       <Head>
-        <title>Χώρες Ευρώπης — Κουίζ Γεωγραφίας | GeoMix</title>
-        <meta name="description" content="Βρες τις χώρες της Ευρώπης στον χάρτη. Από την Πορτογαλία ως την Τουρκία — δωρεάν διαδραστικό κουίζ γεωγραφίας." />
-        <meta name="keywords" content="χώρες ευρώπης, κουίζ ευρώπης, γεωγραφία ευρώπης, ευρωπαϊκές χώρες, εκπαιδευτικό παιχνίδι, διαδραστικός χάρτης ευρώπης" />
-        <meta property="og:title" content="Χώρες Ευρώπης — Κουίζ Γεωγραφίας | GeoMix" />
-        <meta property="og:description" content="Βρες τις χώρες της Ευρώπης στον χάρτη. Δωρεάν και διαδραστικό." />
+        <title>Χώρες Αφρικής — Κουίζ Γεωγραφίας | GeoMix</title>
+        <meta name="description" content="Βρες τις 54 χώρες της Αφρικής στον χάρτη. Από το Μαρόκο ως τη Νότια Αφρική — δωρεάν διαδραστικό κουίζ γεωγραφίας." />
+        <meta name="keywords" content="χώρες αφρικής, κουίζ αφρικής, γεωγραφία αφρικής, αφρικανικές χώρες, εκπαιδευτικό παιχνίδι, διαδραστικός χάρτης αφρικής" />
+        <meta property="og:title" content="Χώρες Αφρικής — Κουίζ Γεωγραφίας | GeoMix" />
+        <meta property="og:description" content="Βρες τις 54 χώρες της Αφρικής στον χάρτη. Δωρεάν και διαδραστικό." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
-        <link rel="canonical" href="https://geomix.gr/quiz/europe" />
+        <link rel="canonical" href="https://geomix.gr/quiz/africa" />
       </Head>
       <MapQuiz
         geojson={geojson}
         questions={quizData.questions}
-        title="GeoMix — Ευρώπη"
+        title="GeoMix — Αφρική"
         flag="🌍"
-        accentColor="emerald"
+        accentColor="amber"
       />
     </>
   );

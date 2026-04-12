@@ -2,6 +2,7 @@ export interface RegionProperties {
   id: string;
   name: string;
   capital?: string;
+  iso2?: string;
   periphery?: string;
 }
 
@@ -9,6 +10,7 @@ export interface Question {
   type: string;
   prompt: string;
   answer: string;
+  image_url?: string;
 }
 
 export interface QuizData {

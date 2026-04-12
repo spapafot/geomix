@@ -41,6 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 /public/data/*
+/public/flags/*
 /scripts/*
 
 /.claude

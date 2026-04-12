@@ -6,7 +6,7 @@ import type { QuizData, RegionProperties } from "@/lib/loadData";
 
 const MapQuiz = dynamic(() => import("@/components/MapQuiz"), { ssr: false });
 
-export default function EuropeQuizPage() {
+export default function EuropeFlagsQuizPage() {
   const [geojson, setGeojson] = useState<GeoJSON.FeatureCollection<GeoJSON.Geometry, RegionProperties> | null>(null);
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -14,7 +14,7 @@ export default function EuropeQuizPage() {
   useEffect(() => {
     Promise.all([
       loadGeoJSON("europe.geojson"),
-      loadQuestions("questions-europe.json"),
+      loadQuestions("questions-europe-flags.json"),
     ])
       .then(([geo, quiz]) => {
         setGeojson(geo);
@@ -35,8 +35,8 @@ export default function EuropeQuizPage() {
     return (
       <div className="flex items-center justify-center h-screen bg-slate-950 text-slate-400">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-emerald-400 mx-auto mb-3" />
-          <p className="text-sm">Φόρτωση χάρτη Ευρώπης…</p>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-yellow-400 mx-auto mb-3" />
+          <p className="text-sm">Φόρτωση σημαιών…</p>
         </div>
       </div>
     );
@@ -45,21 +45,21 @@ export default function EuropeQuizPage() {
   return (
     <>
       <Head>
-        <title>Χώρες Ευρώπης — Κουίζ Γεωγραφίας | GeoMix</title>
-        <meta name="description" content="Βρες τις χώρες της Ευρώπης στον χάρτη. Από την Πορτογαλία ως την Τουρκία — δωρεάν διαδραστικό κουίζ γεωγραφίας." />
-        <meta name="keywords" content="χώρες ευρώπης, κουίζ ευρώπης, γεωγραφία ευρώπης, ευρωπαϊκές χώρες, εκπαιδευτικό παιχνίδι, διαδραστικός χάρτης ευρώπης" />
-        <meta property="og:title" content="Χώρες Ευρώπης — Κουίζ Γεωγραφίας | GeoMix" />
-        <meta property="og:description" content="Βρες τις χώρες της Ευρώπης στον χάρτη. Δωρεάν και διαδραστικό." />
+        <title>Σημαίες Ευρώπης — Κουίζ Γεωγραφίας | GeoMix</title>
+        <meta name="description" content="Βρες τη χώρα από τη σημαία της! Κουίζ με τις σημαίες όλων των ευρωπαϊκών χωρών στον χάρτη. Δωρεάν και διαδραστικό." />
+        <meta name="keywords" content="σημαίες ευρώπης, κουίζ σημαιών, σημαίες χωρών, γεωγραφία ευρώπης, εκπαιδευτικό παιχνίδι, ευρωπαϊκές σημαίες" />
+        <meta property="og:title" content="Σημαίες Ευρώπης — Κουίζ Γεωγραφίας | GeoMix" />
+        <meta property="og:description" content="Βρες τη χώρα από τη σημαία της! Δωρεάν διαδραστικό κουίζ σημαιών Ευρώπης." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
-        <link rel="canonical" href="https://geomix.gr/quiz/europe" />
+        <link rel="canonical" href="https://geomix.gr/quiz/europe-flags" />
       </Head>
       <MapQuiz
         geojson={geojson}
         questions={quizData.questions}
-        title="GeoMix — Ευρώπη"
-        flag="🌍"
-        accentColor="emerald"
+        title="GeoMix — Σημαίες Ευρώπης"
+        flag="🚩"
+        accentColor="yellow"
       />
     </>
   );

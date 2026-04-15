@@ -38,10 +38,10 @@ export default function NorthAmericaReversePage() {
   return (
     <>
       <Head>
-        <title>Αντίστροφο Κουίζ Βόρειας Αμερικής — Γεωγραφία | GeoMix</title>
+        <title>Reverse Mode — Βόρεια Αμερική | GeoMix</title>
         <meta name="description" content="Βρες τη χώρα που είναι επισημασμένη στον χάρτη! Αντίστροφο και κουίζ σημαιών Βόρειας Αμερικής. Δωρεάν και διαδραστικό." />
         <meta name="keywords" content="αντίστροφο κουίζ βόρειας αμερικής, σημαίες βόρειας αμερικής, γεωγραφία αμερικής, εκπαιδευτικό παιχνίδι" />
-        <meta property="og:title" content="Αντίστροφο Κουίζ Βόρειας Αμερικής | GeoMix" />
+        <meta property="og:title" content="Reverse Mode — Βόρεια Αμερική | GeoMix" />
         <meta property="og:description" content="Επίλεξε τη σωστή χώρα ή σημαία από τις 4 επιλογές. Δωρεάν διαδραστικό κουίζ Βόρειας Αμερικής." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
@@ -51,7 +51,7 @@ export default function NorthAmericaReversePage() {
         geojson={geojson}
         title="GeoMix — Βόρεια Αμερική"
         flag="🌎"
-        projection="naturalEarth"
+        projection="mercator"
       />
     </>
   );

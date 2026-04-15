@@ -60,7 +60,7 @@ export default function EuropeCapitalsQuizPage() {
         title="GeoMix — Πρωτεύουσες Ευρώπης"
         flag="🏛️"
         accentColor="blue"
-        projection="azimuthalEqualArea"
+        projection="mercator"
       />
     </>
   );

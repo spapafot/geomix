@@ -45,10 +45,10 @@ export default function EuropeQuizPage() {
   return (
     <>
       <Head>
-        <title>Χώρες Ευρώπης — Κουίζ Γεωγραφίας | GeoMix</title>
+        <title>Ευρώπη — Κουίζ Γεωγραφίας | GeoMix</title>
         <meta name="description" content="Βρες τις χώρες της Ευρώπης στον χάρτη. Από την Πορτογαλία ως την Τουρκία — δωρεάν διαδραστικό κουίζ γεωγραφίας." />
         <meta name="keywords" content="χώρες ευρώπης, κουίζ ευρώπης, γεωγραφία ευρώπης, ευρωπαϊκές χώρες, εκπαιδευτικό παιχνίδι, διαδραστικός χάρτης ευρώπης" />
-        <meta property="og:title" content="Χώρες Ευρώπης — Κουίζ Γεωγραφίας | GeoMix" />
+        <meta property="og:title" content="Ευρώπη — Κουίζ Γεωγραφίας | GeoMix" />
         <meta property="og:description" content="Βρες τις χώρες της Ευρώπης στον χάρτη. Δωρεάν και διαδραστικό." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
@@ -60,7 +60,7 @@ export default function EuropeQuizPage() {
         title="GeoMix — Ευρώπη"
         flag="🌍"
         accentColor="emerald"
-        projection="azimuthalEqualArea"
+        projection="mercator"
       />
     </>
   );

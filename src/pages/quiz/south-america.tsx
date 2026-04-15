@@ -45,10 +45,10 @@ export default function SouthAmericaQuizPage() {
   return (
     <>
       <Head>
-        <title>Χώρες Νότιας Αμερικής — Κουίζ Γεωγραφίας | GeoMix</title>
+        <title>Νότια Αμερική — Κουίζ Γεωγραφίας | GeoMix</title>
         <meta name="description" content="Βρες τις χώρες της Νότιας Αμερικής στον χάρτη. Από τη Βραζιλία ως την Αργεντινή — δωρεάν διαδραστικό κουίζ γεωγραφίας." />
         <meta name="keywords" content="χώρες νότιας αμερικής, κουίζ νότιας αμερικής, γεωγραφία νότιας αμερικής, βραζιλία, αργεντινή, εκπαιδευτικό παιχνίδι" />
-        <meta property="og:title" content="Χώρες Νότιας Αμερικής — Κουίζ Γεωγραφίας | GeoMix" />
+        <meta property="og:title" content="Νότια Αμερική — Κουίζ Γεωγραφίας | GeoMix" />
         <meta property="og:description" content="Βρες τις χώρες της Νότιας Αμερικής στον χάρτη. Δωρεάν και διαδραστικό." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
@@ -60,6 +60,7 @@ export default function SouthAmericaQuizPage() {
         title="GeoMix — Νότια Αμερική"
         flag="🌎"
         accentColor="lime"
+        projection="mercator"
       />
     </>
   );

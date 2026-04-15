@@ -60,7 +60,7 @@ export default function AsiaFlagsQuizPage() {
         title="GeoMix — Σημαίες Ασίας"
         flag="🚩"
         accentColor="rose"
-        projection="naturalEarth"
+        projection="mercator"
       />
     </>
   );

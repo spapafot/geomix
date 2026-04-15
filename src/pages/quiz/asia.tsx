@@ -45,10 +45,10 @@ export default function AsiaQuizPage() {
   return (
     <>
       <Head>
-        <title>Χώρες Ασίας — Κουίζ Γεωγραφίας | GeoMix</title>
+        <title>Ασία — Κουίζ Γεωγραφίας | GeoMix</title>
         <meta name="description" content="Βρες τις χώρες της Ασίας στον χάρτη. Από την Ιαπωνία ως την Τουρκία — δωρεάν διαδραστικό κουίζ γεωγραφίας." />
         <meta name="keywords" content="χώρες ασίας, κουίζ ασίας, γεωγραφία ασίας, ασιατικές χώρες, εκπαιδευτικό παιχνίδι, διαδραστικός χάρτης ασίας" />
-        <meta property="og:title" content="Χώρες Ασίας — Κουίζ Γεωγραφίας | GeoMix" />
+        <meta property="og:title" content="Ασία — Κουίζ Γεωγραφίας | GeoMix" />
         <meta property="og:description" content="Βρες τις χώρες της Ασίας στον χάρτη. Δωρεάν και διαδραστικό." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
@@ -60,7 +60,7 @@ export default function AsiaQuizPage() {
         title="GeoMix — Ασία"
         flag="🌏"
         accentColor="sky"
-        projection="naturalEarth"
+        projection="mercator"
       />
     </>
   );

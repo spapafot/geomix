@@ -51,7 +51,7 @@ export default function QuizPage() {
         <meta property="og:locale" content="el_GR" />
         <link rel="canonical" href="https://geomix.gr/quiz" />
       </Head>
-      <MapQuiz geojson={geojson} questions={quizData.questions} />
+      <MapQuiz geojson={geojson} questions={quizData.questions} projection="mercator" />
     </>
   );
 }

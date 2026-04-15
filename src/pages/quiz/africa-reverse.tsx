@@ -38,10 +38,10 @@ export default function AfricaReversePage() {
   return (
     <>
       <Head>
-        <title>Αντίστροφο Κουίζ Αφρικής — Γεωγραφία | GeoMix</title>
+        <title>Reverse Mode — Αφρική | GeoMix</title>
         <meta name="description" content="Βρες τη χώρα που είναι επισημασμένη στον χάρτη! Αντίστροφο και κουίζ σημαιών Αφρικής. Δωρεάν και διαδραστικό." />
         <meta name="keywords" content="αντίστροφο κουίζ αφρικής, σημαίες αφρικής, γεωγραφία αφρικής, εκπαιδευτικό παιχνίδι" />
-        <meta property="og:title" content="Αντίστροφο Κουίζ Αφρικής | GeoMix" />
+        <meta property="og:title" content="Reverse Mode — Αφρική | GeoMix" />
         <meta property="og:description" content="Επίλεξε τη σωστή χώρα ή σημαία από τις 4 επιλογές. Δωρεάν διαδραστικό κουίζ Αφρικής." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
@@ -51,7 +51,7 @@ export default function AfricaReversePage() {
         geojson={geojson}
         title="GeoMix — Αφρική"
         flag="🌍"
-        projection="azimuthalEqualArea"
+        projection="mercator"
       />
     </>
   );

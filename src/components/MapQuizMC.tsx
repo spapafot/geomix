@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import "@/lib/i18n";
 import {
   geoPath,
   geoNaturalEarth1,
@@ -27,6 +29,7 @@ interface MapQuizMCProps {
   flag?: string;
   defaultMode?: MCMode;
   projection?: ProjectionType;
+  projectionRotate?: [number, number] | [number, number, number];
 }
 
 // ── Colour helpers ────────────────────────────────────────────────────────────
@@ -60,8 +63,10 @@ export default function MapQuizMC({
   flag = "🗺️",
   defaultMode = "names",
   projection: projectionType = "naturalEarth",
+  projectionRotate,
 }: MapQuizMCProps) {
   const router = useRouter();
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -114,12 +119,14 @@ export default function MapQuizMC({
                                                      geoNaturalEarth1;
 
     const padding = width < 640 ? 10 : 20;
-    const proj = projFactory().fitExtent(
+    const baseProj = projFactory();
+    if (projectionRotate) (baseProj as any).rotate(projectionRotate);
+    const proj = baseProj.fitExtent(
       [[padding, padding], [width - padding, height - padding]],
       geojson,
     );
     return geoPath(proj);
-  }, [geojson, containerSize, effectiveProjection]);
+  }, [geojson, containerSize, effectiveProjection, projectionRotate]);
 
   // ── Style per feature ─────────────────────────────────────────────────────
   const getStyle = useCallback((id: string) => {
@@ -194,8 +201,9 @@ export default function MapQuizMC({
           onClick={() => router.push("/")}
           className="absolute top-4 left-4 z-10 flex items-center gap-1.5 text-xs text-slate-400 hover:text-white bg-slate-900/80 backdrop-blur-sm border border-slate-700/60 rounded-lg px-3 py-1.5 transition-colors"
         >
-          ← Αρχική
+          ← {t("quiz.back_home")}
         </button>
+
 
         {/* D3 SVG map */}
         {pathFn && (
@@ -251,7 +259,7 @@ export default function MapQuizMC({
                   : "bg-slate-800 text-slate-400 hover:text-slate-200"
               }`}
             >
-              🗺️ Αντίστροφο
+              🗺️ {t("quiz.mode_names")}
             </button>
             {hasFlags && (
               <button
@@ -262,7 +270,7 @@ export default function MapQuizMC({
                     : "bg-slate-800 text-slate-400 hover:text-slate-200"
                 }`}
               >
-                🚩 Σημαίες
+                🚩 {t("quiz.mode_flags")}
               </button>
             )}
           </div>
@@ -293,16 +301,16 @@ export default function MapQuizMC({
                   {score === questions.length ? "🏆" : score >= questions.length / 2 ? "🎉" : "📚"}
                 </div>
                 <p className="text-2xl font-bold">
-                  {score === questions.length ? "Τέλειο!" : `${score} / ${questions.length} σωστά`}
+                  {score === questions.length ? "🏆" : `${score} / ${questions.length} ${t("quiz.correct_answers")}`}
                 </p>
                 <p className="text-slate-400 text-sm">
-                  {score === questions.length ? "Άριστη γνώση!" : "Συνέχισε να εξασκείσαι!"}
+                  {t("quiz.quiz_complete")}
                 </p>
                 <button
                   onClick={handleRestart}
                   className="mt-2 px-6 py-2.5 bg-amber-600 hover:bg-amber-500 rounded-xl font-semibold transition-colors text-sm"
                 >
-                  Παίξε Ξανά
+                  {t("quiz.play_again")}
                 </button>
                 <button
                   onClick={() => router.push("/")}
@@ -322,12 +330,12 @@ export default function MapQuizMC({
                 className="flex flex-col gap-4"
               >
                 <p className="text-[10px] uppercase tracking-widest text-slate-500 font-medium">
-                  Ερώτηση {index + 1} από {questions.length}
+                  {t("quiz.question")} {index + 1} {t("quiz.of")} {questions.length}
                 </p>
                 <p className="text-base font-semibold text-slate-100 leading-snug">
                   {mcMode === "flags"
-                    ? "Ποια σημαία ανήκει στη χώρα που είναι επισημασμένη;"
-                    : "Ποια χώρα είναι επισημασμένη στον χάρτη;"}
+                    ? t("quiz.which_flag")
+                    : t("quiz.which_country")}
                 </p>
 
                 {/* ── Name options ── */}
@@ -434,7 +442,7 @@ export default function MapQuizMC({
                           transition={{ duration: AUTO_ADVANCE_MS / 1000, ease: "linear" }}
                         />
                         <span className="relative z-10 text-xs font-semibold text-slate-300 group-hover:text-white transition-colors">
-                          {index + 1 >= questions.length ? "Δες Αποτελέσματα →" : "Επόμενη →"}
+                          {index + 1 >= questions.length ? t("quiz.see_results") : t("quiz.next_question")}
                         </span>
                       </button>
                     </motion.div>

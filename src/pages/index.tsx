@@ -2,9 +2,11 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 import { GridPattern } from "@/components/ui/grid-pattern";
+import "@/lib/i18n";
 
 interface GameMode {
   id: string;
@@ -22,6 +24,7 @@ interface GameMode {
 
 interface GameGroup {
   label: string;
+  labelKey: string;
   flag: string;
   games: GameMode[];
 }
@@ -29,6 +32,7 @@ interface GameGroup {
 const GAME_GROUPS: GameGroup[] = [
   {
     label: "Ελλάδα",
+    labelKey: "continents.greece",
     flag: "🇬🇷",
     games: [
       {
@@ -59,12 +63,13 @@ const GAME_GROUPS: GameGroup[] = [
   },
   {
     label: "Ευρώπη",
+    labelKey: "continents.europe",
     flag: "🇪🇺",
     games: [
       {
         id: "europe",
         icon: "🌍",
-        title: "Χώρες Ευρώπης",
+        title: "Ευρώπη",
         desc: "Εντόπισε τις χώρες της Ευρώπης στον χάρτη. Από την Πορτογαλία ως την Τουρκία.",
         route: "/quiz/europe",
         available: true,
@@ -100,7 +105,7 @@ const GAME_GROUPS: GameGroup[] = [
       {
         id: "europe-reverse",
         icon: "🔀",
-        title: "Αντίστροφο Ευρώπης",
+        title: "Reverse Mode",
         desc: "Δες μια επισημασμένη χώρα στον χάρτη και επίλεξε το σωστό όνομα ή σημαία από 4 επιλογές.",
         route: "/quiz/europe-reverse",
         available: true,
@@ -113,12 +118,13 @@ const GAME_GROUPS: GameGroup[] = [
   },
   {
     label: "Ασία",
+    labelKey: "continents.asia",
     flag: "🌏",
     games: [
       {
         id: "asia",
         icon: "🗺️",
-        title: "Χώρες Ασίας",
+        title: "Ασία",
         desc: "Εντόπισε τις χώρες της Ασίας στον χάρτη. Από την Ιαπωνία ως την Τουρκία.",
         route: "/quiz/asia",
         available: true,
@@ -154,7 +160,7 @@ const GAME_GROUPS: GameGroup[] = [
       {
         id: "asia-reverse",
         icon: "🔀",
-        title: "Αντίστροφο Ασίας",
+        title: "Reverse Mode",
         desc: "Δες μια επισημασμένη χώρα στον χάρτη και επίλεξε το σωστό όνομα ή σημαία από 4 επιλογές.",
         route: "/quiz/asia-reverse",
         available: true,
@@ -167,12 +173,13 @@ const GAME_GROUPS: GameGroup[] = [
   },
   {
     label: "Βόρεια Αμερική",
+    labelKey: "continents.north_america",
     flag: "🌎",
     games: [
       {
         id: "north-america",
         icon: "🗺️",
-        title: "Χώρες Βόρειας Αμερικής",
+        title: "Βόρεια Αμερική",
         desc: "Εντόπισε τις χώρες της Βόρειας Αμερικής στον χάρτη. Από τον Καναδά ως τον Παναμά.",
         route: "/quiz/north-america",
         available: true,
@@ -208,7 +215,7 @@ const GAME_GROUPS: GameGroup[] = [
       {
         id: "north-america-reverse",
         icon: "🔀",
-        title: "Αντίστροφο Βόρειας Αμερικής",
+        title: "Reverse Mode",
         desc: "Δες μια επισημασμένη χώρα στον χάρτη και επίλεξε το σωστό όνομα ή σημαία από 4 επιλογές.",
         route: "/quiz/north-america-reverse",
         available: true,
@@ -221,12 +228,13 @@ const GAME_GROUPS: GameGroup[] = [
   },
   {
     label: "Νότια Αμερική",
+    labelKey: "continents.south_america",
     flag: "🌎",
     games: [
       {
         id: "south-america",
         icon: "🗺️",
-        title: "Χώρες Νότιας Αμερικής",
+        title: "Νότια Αμερική",
         desc: "Εντόπισε τις χώρες της Νότιας Αμερικής στον χάρτη. Από τη Βραζιλία ως την Αργεντινή.",
         route: "/quiz/south-america",
         available: true,
@@ -262,7 +270,7 @@ const GAME_GROUPS: GameGroup[] = [
       {
         id: "south-america-reverse",
         icon: "🔀",
-        title: "Αντίστροφο Νότιας Αμερικής",
+        title: "Reverse Mode",
         desc: "Δες μια επισημασμένη χώρα στον χάρτη και επίλεξε το σωστό όνομα ή σημαία από 4 επιλογές.",
         route: "/quiz/south-america-reverse",
         available: true,
@@ -275,12 +283,13 @@ const GAME_GROUPS: GameGroup[] = [
   },
   {
     label: "Αφρική",
+    labelKey: "continents.africa",
     flag: "🌍",
     games: [
       {
         id: "africa",
         icon: "🗺️",
-        title: "Χώρες Αφρικής",
+        title: "Αφρική",
         desc: "Εντόπισε τις χώρες της Αφρικής στον χάρτη. Από το Μαρόκο ως τη Νότια Αφρική.",
         route: "/quiz/africa",
         available: true,
@@ -316,7 +325,7 @@ const GAME_GROUPS: GameGroup[] = [
       {
         id: "africa-reverse",
         icon: "🔀",
-        title: "Αντίστροφο Αφρικής",
+        title: "Reverse Mode",
         desc: "Δες μια επισημασμένη χώρα στον χάρτη και επίλεξε το σωστό όνομα ή σημαία από 4 επιλογές.",
         route: "/quiz/africa-reverse",
         available: true,
@@ -331,6 +340,7 @@ const GAME_GROUPS: GameGroup[] = [
 
 export default function LandingPage() {
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -371,24 +381,23 @@ export default function LandingPage() {
           <BlurFade delay={0.05} duration={0.3}>
             <div className="mb-6 flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-medium text-blue-300 backdrop-blur-sm">
               <span>🇬🇷</span>
-              <span>Εκπαιδευτική Πλατφόρμα Γεωγραφίας</span>
+              <span>{t("landing.badge")}</span>
             </div>
           </BlurFade>
 
           {/* Hero */}
           <BlurFade delay={0.1} duration={0.3}>
             <h1 className="text-center text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-6">
-              Μάθε τη Γεωγραφία <br />
+              {t("landing.hero_line1")} <br />
               <AnimatedGradientText className="text-5xl sm:text-6xl font-extrabold">
-                της Ελλάδας
+                {t("landing.hero_line2")}
               </AnimatedGradientText>
             </h1>
           </BlurFade>
 
           <BlurFade delay={0.15} duration={0.3}>
             <p className="text-center text-lg text-slate-400 max-w-xl mb-14 leading-relaxed">
-              Ένα δωρεάν, διαδραστικό κουίζ γεωγραφίας για μαθητές όλων των
-              ηλικιών. Διάλεξε τύπο παιχνιδιού και ξεκίνα!
+              {t("landing.subtitle")}
             </p>
           </BlurFade>
 
@@ -406,7 +415,7 @@ export default function LandingPage() {
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-lg">{group.flag}</span>
                   <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-widest">
-                    {group.label}
+                    {t(group.labelKey)}
                   </h2>
                   <div className="flex-1 h-px bg-slate-800" />
                 </div>
@@ -453,10 +462,10 @@ export default function LandingPage() {
                           </span>
                           <div className="flex-1 min-w-0">
                             <h3 className="font-bold text-slate-100 text-base mb-1">
-                              {game.title}
+                              {t(`games.${game.id}.title`)}
                             </h3>
                             <p className="text-sm text-slate-400 leading-relaxed">
-                              {game.desc}
+                              {t(`games.${game.id}.desc`)}
                             </p>
                           </div>
                         </div>
@@ -466,7 +475,7 @@ export default function LandingPage() {
                             <div
                               className={`flex items-center gap-1.5 text-xs font-semibold ${game.playColor}`}
                             >
-                              <span>Παίξε τώρα</span>
+                              <span>{t("landing.play_now")}</span>
                               <span>→</span>
                             </div>
                             {!game.route.endsWith("-reverse") && (
@@ -477,7 +486,7 @@ export default function LandingPage() {
                                 }}
                                 className="text-[11px] text-slate-500 hover:text-slate-300 transition-colors cursor-pointer"
                               >
-                                🔍 Εξερεύνηση
+                                🔍 {t("quiz.mode_relax")}
                               </span>
                             )}
                           </div>
@@ -491,41 +500,13 @@ export default function LandingPage() {
           </div>
 
           <footer className="mt-16 border-t border-slate-800/60 pt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-600 w-full">
-            <span>
-              © {new Date().getFullYear()} GeoMix · Εκπαιδευτική πλατφόρμα
-              γεωγραφίας
-            </span>
+            <span>© {new Date().getFullYear()} GeoMix · {t("footer.tagline")}</span>
             <div className="flex flex-wrap gap-4">
-              <Link
-                href="/learn"
-                className="hover:text-slate-400 transition-colors"
-              >
-                Μάθε Γεωγραφία
-              </Link>
-              <Link
-                href="/about"
-                className="hover:text-slate-400 transition-colors"
-              >
-                Σχετικά
-              </Link>
-              <Link
-                href="/contact"
-                className="hover:text-slate-400 transition-colors"
-              >
-                Επικοινωνία
-              </Link>
-              <Link
-                href="/privacy-policy"
-                className="hover:text-slate-400 transition-colors"
-              >
-                Πολιτική Απορρήτου
-              </Link>
-              <Link
-                href="/terms"
-                className="hover:text-slate-400 transition-colors"
-              >
-                Όροι Χρήσης
-              </Link>
+              <Link href="/learn" className="hover:text-slate-400 transition-colors">{t("nav.learn")}</Link>
+              <Link href="/about" className="hover:text-slate-400 transition-colors">{t("landing.about")}</Link>
+              <Link href="/contact" className="hover:text-slate-400 transition-colors">{t("landing.contact")}</Link>
+              <Link href="/privacy-policy" className="hover:text-slate-400 transition-colors">{t("footer.privacy")}</Link>
+              <Link href="/terms" className="hover:text-slate-400 transition-colors">{t("footer.terms")}</Link>
             </div>
           </footer>
         </div>

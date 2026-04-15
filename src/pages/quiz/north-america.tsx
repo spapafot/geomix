@@ -45,10 +45,10 @@ export default function NorthAmericaQuizPage() {
   return (
     <>
       <Head>
-        <title>Χώρες Βόρειας Αμερικής — Κουίζ Γεωγραφίας | GeoMix</title>
+        <title>Βόρεια Αμερική — Κουίζ Γεωγραφίας | GeoMix</title>
         <meta name="description" content="Βρες τις χώρες της Βόρειας Αμερικής στον χάρτη. Από τον Καναδά ως τον Παναμά — δωρεάν διαδραστικό κουίζ γεωγραφίας." />
         <meta name="keywords" content="χώρες βόρειας αμερικής, κουίζ βόρειας αμερικής, γεωγραφία βόρειας αμερικής, μεξικό, καναδάς, εκπαιδευτικό παιχνίδι" />
-        <meta property="og:title" content="Χώρες Βόρειας Αμερικής — Κουίζ Γεωγραφίας | GeoMix" />
+        <meta property="og:title" content="Βόρεια Αμερική — Κουίζ Γεωγραφίας | GeoMix" />
         <meta property="og:description" content="Βρες τις χώρες της Βόρειας Αμερικής στον χάρτη. Δωρεάν και διαδραστικό." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />

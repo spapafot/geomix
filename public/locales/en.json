@@ -1,0 +1,111 @@
+{
+  "nav": {
+    "home": "Home",
+    "learn": "Learn Geography",
+    "about": "About"
+  },
+  "home": {
+    "hero_title": "Learn Geography",
+    "hero_subtitle": "Play, explore and discover the world through interactive geography quizzes.",
+    "play": "Play",
+    "explore": "Explore",
+    "coming_soon": "Coming soon"
+  },
+  "quiz": {
+    "question": "QUESTION",
+    "of": "OF",
+    "find_country": "Find the country:",
+    "find_region": "Find the region:",
+    "find_capital": "What is the capital?",
+    "find_flag": "Find the flag:",
+    "click_map": "Click on the map",
+    "correct": "Correct!",
+    "wrong": "Wrong!",
+    "was_here": "It was here:",
+    "score": "Score",
+    "quiz_complete": "Quiz complete!",
+    "correct_answers": "correct answers",
+    "play_again": "Play again",
+    "back_home": "Home",
+    "mode_quiz": "Quiz",
+    "mode_relax": "Explore",
+    "mode_names": "Reverse",
+    "mode_flags": "Flags",
+    "next": "Next",
+    "loading": "Loading map…",
+    "you_answered": "You answered:",
+    "correct_answer": "Correct answer:",
+    "see_results": "See Results →",
+    "next_question": "Next →",
+    "which_flag": "Which flag belongs to the highlighted country?",
+    "which_country": "Which country is highlighted on the map?"
+  },
+  "learn": {
+    "title": "Learn Geography",
+    "subtitle": "Educational guides for every continent — countries, capitals, flags and geographic facts. Read first, then try the quiz!",
+    "read": "Read →",
+    "go_to_quiz": "🎯 Go to quiz",
+    "countries_capitals": "Countries & Capitals",
+    "interesting_facts": "Interesting Facts",
+    "try_quiz": "Test your knowledge!",
+    "geography_intro": "Geographic Introduction",
+    "articles": {
+      "greece": { "title": "Geography of Greece", "desc": "Regions, prefectures, geographic features and major cities of Greece." },
+      "europe": { "title": "Europe", "desc": "All 44 countries of Europe, their capitals and key geographic facts." },
+      "asia": { "title": "Asia", "desc": "The largest continent — 45 countries, capitals and geographic highlights." },
+      "africa": { "title": "Africa", "desc": "The continent with the most countries — 53 countries and their capitals." },
+      "north-america": { "title": "North America", "desc": "From Canada to Panama — 15 countries and their geographic features." },
+      "south-america": { "title": "South America", "desc": "Brazil, Argentina and 10 more countries — geography and capitals." },
+      "oceania": { "title": "Oceania", "desc": "Australia, New Zealand and the island nations of the Pacific Ocean." },
+      "antarctica": { "title": "Antarctica", "desc": "The continent without countries — territorial claims, research stations and geographic records." }
+    }
+  },
+  "footer": {
+    "tagline": "Free educational geography platform",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use"
+  },
+  "landing": {
+    "badge": "Geography Education Platform",
+    "hero_line1": "Learn Geography",
+    "hero_line2": "of the World",
+    "subtitle": "A free, interactive geography quiz for learners of all ages. Choose a game type and start!",
+    "play_now": "Play now",
+    "contact": "Contact",
+    "about": "About"
+  },
+  "games": {
+    "peripheries": { "title": "Regions", "desc": "Find the regions of Greece on the map. Great for beginners." },
+    "nomoi": { "title": "Prefectures", "desc": "Find the prefectures of Greece on the map. A challenge for advanced players." },
+    "europe": { "title": "Europe", "desc": "Find the countries of Europe on the map. From Portugal to Turkey." },
+    "europe-capitals": { "title": "European Capitals", "desc": "Do you know which country Vienna or Bratislava is in? Find out!" },
+    "europe-flags": { "title": "European Flags", "desc": "Find the country from its flag. Do you know all European flags?" },
+    "europe-reverse": { "title": "Reverse Mode", "desc": "See a highlighted country on the map and choose the correct name or flag from 4 options." },
+    "asia": { "title": "Asia", "desc": "Find the countries of Asia on the map. From Japan to Turkey." },
+    "asia-capitals": { "title": "Asian Capitals", "desc": "Do you know which country Tokyo or Baghdad is in? Find out!" },
+    "asia-flags": { "title": "Asian Flags", "desc": "Find the country from its flag. Do you know all Asian flags?" },
+    "asia-reverse": { "title": "Reverse Mode", "desc": "See a highlighted country on the map and choose the correct name or flag from 4 options." },
+    "north-america": { "title": "North America", "desc": "Find the countries of North America on the map. From Canada to Panama." },
+    "north-america-capitals": { "title": "N. America Capitals", "desc": "Do you know which country Havana or San José is in? Find out!" },
+    "north-america-flags": { "title": "N. America Flags", "desc": "Find the country from its flag. Do you know all North American flags?" },
+    "north-america-reverse": { "title": "Reverse Mode", "desc": "See a highlighted country on the map and choose the correct name or flag from 4 options." },
+    "south-america": { "title": "South America", "desc": "Find the countries of South America on the map. From Brazil to Argentina." },
+    "south-america-capitals": { "title": "S. America Capitals", "desc": "Do you know which country Buenos Aires or Brasília is in? Find out!" },
+    "south-america-flags": { "title": "S. America Flags", "desc": "Find the country from its flag. Do you know all South American flags?" },
+    "south-america-reverse": { "title": "Reverse Mode", "desc": "See a highlighted country on the map and choose the correct name or flag from 4 options." },
+    "africa": { "title": "Africa", "desc": "Find the countries of Africa on the map. From Morocco to South Africa." },
+    "africa-capitals": { "title": "African Capitals", "desc": "Do you know which country Nairobi or Cairo is in? Find out!" },
+    "africa-flags": { "title": "African Flags", "desc": "Find the country from its flag. Do you know all African flags?" },
+    "africa-reverse": { "title": "Reverse Mode", "desc": "See a highlighted country on the map and choose the correct name or flag from 4 options." }
+  },
+  "continents": {
+    "greece": "Greece",
+    "europe": "Europe",
+    "asia": "Asia",
+    "africa": "Africa",
+    "north_america": "North America",
+    "south_america": "South America",
+    "oceania": "Oceania",
+    "antarctica": "Antarctica"
+  }
+}

@@ -38,10 +38,10 @@ export default function AsiaReversePage() {
   return (
     <>
       <Head>
-        <title>Αντίστροφο Κουίζ Ασίας — Γεωγραφία | GeoMix</title>
+        <title>Reverse Mode — Ασία | GeoMix</title>
         <meta name="description" content="Βρες τη χώρα που είναι επισημασμένη στον χάρτη! Αντίστροφο και κουίζ σημαιών Ασίας. Δωρεάν και διαδραστικό." />
         <meta name="keywords" content="αντίστροφο κουίζ ασίας, σημαίες ασίας, γεωγραφία ασίας, εκπαιδευτικό παιχνίδι" />
-        <meta property="og:title" content="Αντίστροφο Κουίζ Ασίας | GeoMix" />
+        <meta property="og:title" content="Reverse Mode — Ασία | GeoMix" />
         <meta property="og:description" content="Επίλεξε τη σωστή χώρα ή σημαία από τις 4 επιλογές. Δωρεάν διαδραστικό κουίζ Ασίας." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
@@ -51,7 +51,7 @@ export default function AsiaReversePage() {
         geojson={geojson}
         title="GeoMix — Ασία"
         flag="🌏"
-        projection="naturalEarth"
+        projection="mercator"
       />
     </>
   );

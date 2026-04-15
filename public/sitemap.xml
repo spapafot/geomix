@@ -64,6 +64,16 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://geomix.gr/learn/oceania</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://geomix.gr/learn/antarctica</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 
   <!-- Greece -->
   <url>
@@ -186,5 +196,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+
+
 
 </urlset>

@@ -45,10 +45,10 @@ export default function AfricaQuizPage() {
   return (
     <>
       <Head>
-        <title>Χώρες Αφρικής — Κουίζ Γεωγραφίας | GeoMix</title>
+        <title>Αφρική — Κουίζ Γεωγραφίας | GeoMix</title>
         <meta name="description" content="Βρες τις 54 χώρες της Αφρικής στον χάρτη. Από το Μαρόκο ως τη Νότια Αφρική — δωρεάν διαδραστικό κουίζ γεωγραφίας." />
         <meta name="keywords" content="χώρες αφρικής, κουίζ αφρικής, γεωγραφία αφρικής, αφρικανικές χώρες, εκπαιδευτικό παιχνίδι, διαδραστικός χάρτης αφρικής" />
-        <meta property="og:title" content="Χώρες Αφρικής — Κουίζ Γεωγραφίας | GeoMix" />
+        <meta property="og:title" content="Αφρική — Κουίζ Γεωγραφίας | GeoMix" />
         <meta property="og:description" content="Βρες τις 54 χώρες της Αφρικής στον χάρτη. Δωρεάν και διαδραστικό." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
@@ -60,7 +60,7 @@ export default function AfricaQuizPage() {
         title="GeoMix — Αφρική"
         flag="🌍"
         accentColor="amber"
-        projection="azimuthalEqualArea"
+        projection="mercator"
       />
     </>
   );

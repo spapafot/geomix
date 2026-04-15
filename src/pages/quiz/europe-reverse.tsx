@@ -38,10 +38,10 @@ export default function EuropeReversePage() {
   return (
     <>
       <Head>
-        <title>Αντίστροφο Κουίζ Ευρώπης — Γεωγραφία | GeoMix</title>
+        <title>Reverse Mode — Ευρώπη | GeoMix</title>
         <meta name="description" content="Βρες τη χώρα που είναι επισημασμένη στον χάρτη! Αντίστροφο και κουίζ σημαιών Ευρώπης. Δωρεάν και διαδραστικό." />
         <meta name="keywords" content="αντίστροφο κουίζ ευρώπης, σημαίες ευρώπης, γεωγραφία ευρώπης, εκπαιδευτικό παιχνίδι" />
-        <meta property="og:title" content="Αντίστροφο Κουίζ Ευρώπης | GeoMix" />
+        <meta property="og:title" content="Reverse Mode — Ευρώπη | GeoMix" />
         <meta property="og:description" content="Επίλεξε τη σωστή χώρα ή σημαία από τις 4 επιλογές. Δωρεάν διαδραστικό κουίζ Ευρώπης." />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="el_GR" />
@@ -51,7 +51,7 @@ export default function EuropeReversePage() {
         geojson={geojson}
         title="GeoMix — Ευρώπη"
         flag="🌍"
-        projection="azimuthalEqualArea"
+        projection="mercator"
       />
     </>
   );

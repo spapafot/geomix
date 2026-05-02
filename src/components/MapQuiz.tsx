@@ -75,7 +75,8 @@ export default function MapQuiz({
   projectionRotate,
 }: MapQuizProps) {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isEn = i18n.language === "en";
   const containerRef = useRef<HTMLDivElement>(null);
   const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -223,8 +224,11 @@ export default function MapQuiz({
   };
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  const getRegionName = (id: string) =>
-    geojson.features.find((f) => f.properties.id === id)?.properties.name ?? id;
+  const getRegionName = (id: string) => {
+    const props = geojson.features.find((f) => f.properties.id === id)?.properties;
+    if (!props) return id;
+    return (isEn ? props.name_en : undefined) ?? props.name ?? id;
+  };
 
   const progress = ((currentIndex + (answered ? 1 : 0)) / questions.length) * 100;
 
@@ -363,12 +367,12 @@ export default function MapQuiz({
                       )}
                       <div>
                         <h2 className="text-2xl font-bold text-white leading-tight">
-                          {p?.name}
+                          {(isEn ? p?.name_en : undefined) ?? p?.name}
                         </h2>
-                        {p?.capital && (
+                        {(p?.capital || p?.capital_en) && (
                           <div className="flex items-center gap-2 mt-2 text-slate-300 text-sm">
                             <span>🏛️</span>
-                            <span>{p.capital}</span>
+                            <span>{(isEn ? p?.capital_en : undefined) ?? p?.capital}</span>
                           </div>
                         )}
                       </div>
@@ -442,7 +446,7 @@ export default function MapQuiz({
                     {t("quiz.question")} {currentIndex + 1} {t("quiz.of")} {questions.length}
                   </p>
                   <p className="text-lg font-semibold text-slate-100 leading-snug">
-                    {currentQuestion.prompt}
+                    {(isEn ? currentQuestion.prompt_en : undefined) ?? currentQuestion.prompt}
                   </p>
                   {currentQuestion.image_url && (
                     <img

@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import { useEffect } from "react";
 import "@/lib/i18n";
 import i18n, { getStoredLang } from "@/lib/i18n";
+import CookieConsent from "@/components/CookieConsent";
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -13,5 +14,10 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, []);
 
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <Component {...pageProps} />
+      {/* <CookieConsent /> */}
+    </>
+  );
 }

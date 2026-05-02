@@ -66,7 +66,8 @@ export default function MapQuizMC({
   projectionRotate,
 }: MapQuizMCProps) {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isEn = i18n.language === "en";
   const containerRef = useRef<HTMLDivElement>(null);
   const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -181,8 +182,11 @@ export default function MapQuizMC({
   };
 
   // ── Helpers ───────────────────────────────────────────────────────────────
-  const getRegionName = (id: string) =>
-    geojson.features.find((f) => f.properties.id === id)?.properties.name ?? id;
+  const getRegionName = (id: string) => {
+    const props = geojson.features.find((f) => f.properties.id === id)?.properties;
+    if (!props) return id;
+    return (isEn ? props.name_en : undefined) ?? props.name ?? id;
+  };
 
   const getIso2 = (id: string) =>
     geojson.features.find((f) => f.properties.id === id)?.properties.iso2 ?? null;
@@ -316,7 +320,7 @@ export default function MapQuizMC({
                   onClick={() => router.push("/")}
                   className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
                 >
-                  ← Επιλογή παιχνιδιού
+                  ← {t("quiz.back_home")}
                 </button>
               </motion.div>
             ) : (
@@ -425,7 +429,7 @@ export default function MapQuizMC({
                     >
                       {picked !== question?.targetId && (
                         <p className="text-xs text-slate-400">
-                          Σωστή απάντηση:{" "}
+                          {t("quiz.correct_answer")}{" "}
                           <span className="text-green-300 font-medium">
                             {getRegionName(question?.targetId ?? "")}
                           </span>

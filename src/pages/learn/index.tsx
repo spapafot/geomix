@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import SiteNav from "@/components/SiteNav";
+import SiteFooter from "@/components/SiteFooter";
 import "@/lib/i18n";
 
 const ARTICLES = [
@@ -18,19 +19,19 @@ const ARTICLES = [
 
 export default function LearnIndexPage() {
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const ogLocale = i18n.language === "en" ? "en_US" : "el_GR";
 
   return (
     <>
       <Head>
-        <title>Μάθε Γεωγραφία — Εκπαιδευτικοί Οδηγοί | GeoMix</title>
-        <meta name="description" content="Εκπαιδευτικοί οδηγοί γεωγραφίας για Ελλάδα, Ευρώπη, Ασία, Αφρική, Βόρεια και Νότια Αμερική. Χώρες, πρωτεύουσες, σημαίες και γεωγραφικά στοιχεία." />
-        <meta name="keywords" content="μάθε γεωγραφία, εκπαιδευτικοί οδηγοί, χώρες ευρώπης, χώρες ασίας, χώρες αφρικής, πρωτεύουσες" />
+        <title>{t("learn.title")} — {t("nav.learn")} | GeoMix</title>
+        <meta name="description" content={t("learn.subtitle")} />
         <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Μάθε Γεωγραφία — Εκπαιδευτικοί Οδηγοί | GeoMix" />
-        <meta property="og:description" content="Δωρεάν εκπαιδευτικοί οδηγοί γεωγραφίας για κάθε ήπειρο." />
+        <meta property="og:title" content={`${t("learn.title")} | GeoMix`} />
+        <meta property="og:description" content={t("learn.subtitle")} />
         <meta property="og:type" content="website" />
-        <meta property="og:locale" content="el_GR" />
+        <meta property="og:locale" content={ogLocale} />
         <link rel="canonical" href="https://geomix.gr/learn" />
       </Head>
 
@@ -77,15 +78,7 @@ export default function LearnIndexPage() {
           </div>
         </main>
 
-        <footer className="border-t border-slate-800 mt-8">
-          <div className="max-w-4xl mx-auto px-6 py-6 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-600">
-            <span>© {new Date().getFullYear()} GeoMix · {t("footer.tagline")}</span>
-            <div className="flex gap-4">
-              <Link href="/privacy-policy" className="hover:text-slate-400 transition-colors">{t("footer.privacy")}</Link>
-              <Link href="/terms" className="hover:text-slate-400 transition-colors">{t("footer.terms")}</Link>
-            </div>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </>
   );

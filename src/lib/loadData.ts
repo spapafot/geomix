@@ -1,7 +1,9 @@
 export interface RegionProperties {
   id: string;
   name: string;
+  name_en?: string;
   capital?: string;
+  capital_en?: string;
   iso2?: string;
   periphery?: string;
 }
@@ -9,6 +11,9 @@ export interface RegionProperties {
 export interface Question {
   type: string;
   prompt: string;
+  prompt_en?: string;
+  /** English entity name — country, capital, or region depending on quiz type */
+  name?: string;
   answer: string;
   image_url?: string;
 }

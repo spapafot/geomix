@@ -1,47 +1,52 @@
+import fs from "fs";
+import path from "path";
 import Head from "next/head";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import SiteNav from "@/components/SiteNav";
+import SiteFooter from "@/components/SiteFooter";
+import "@/lib/i18n";
 
-const REGIONS = [
-  { name: "Αττική", capital: "Αθήνα" },
-  { name: "Κεντρική Μακεδονία", capital: "Θεσσαλονίκη" },
-  { name: "Θεσσαλία", capital: "Λάρισα" },
-  { name: "Ανατολική Μακεδονία & Θράκη", capital: "Κομοτηνή" },
-  { name: "Κεντρική Ελλάδα", capital: "Λαμία" },
-  { name: "Δυτική Ελλάδα", capital: "Πάτρα" },
-  { name: "Πελοπόννησος", capital: "Τρίπολη" },
-  { name: "Δυτική Μακεδονία", capital: "Κοζάνη" },
-  { name: "Ήπειρος", capital: "Ιωάννινα" },
-  { name: "Ιόνια Νησιά", capital: "Κέρκυρα" },
-  { name: "Βόρειο Αιγαίο", capital: "Μυτιλήνη" },
-  { name: "Νότιο Αιγαίο", capital: "Ερμούπολη" },
-  { name: "Κρήτη", capital: "Ηράκλειο" },
-];
+interface Region {
+  id: string;
+  name: string;
+  name_en: string;
+  capital: string;
+}
 
-export default function LearnGreecePage() {
+interface Props {
+  regions: Region[];
+}
+
+export async function getStaticProps() {
+  const file = path.join(process.cwd(), "public/data/greece-regions.geojson");
+  const geojson = JSON.parse(fs.readFileSync(file, "utf8"));
+  const regions: Region[] = geojson.features
+    .map((f: { properties: { id: string; name: string; name_en?: string; capital?: string } }) => ({
+      id: f.properties.id,
+      name: f.properties.name,
+      name_en: f.properties.name_en ?? f.properties.id,
+      capital: f.properties.capital ?? "",
+    }))
+    .sort((a: Region, b: Region) => a.name.localeCompare(b.name, "el"));
+  return { props: { regions } };
+}
+
+export default function LearnGreecePage({ regions }: Props) {
+  const { t, i18n } = useTranslation();
+  const isEn = i18n.language === "en";
+  const k = "pages.greece";
+
   return (
     <>
       <Head>
-        <title>Γεωγραφία Ελλάδας — Περιφέρειες, Νομοί & Πόλεις | GeoMix</title>
-        <meta
-          name="description"
-          content="Μάθε τις 13 περιφέρειες και τους 74 νομούς της Ελλάδας. Πρωτεύουσες, γεωγραφικά χαρακτηριστικά και σημαντικές πόλεις."
-        />
-        <meta
-          name="keywords"
-          content="περιφέρειες ελλάδας, νομοί ελλάδας, γεωγραφία ελλάδας, ελληνικές περιφέρειες, πρωτεύουσες ελλάδας"
-        />
+        <title>{t(`${k}.head_title`)}</title>
+        <meta name="description" content={t(`${k}.head_desc`)} />
         <meta name="robots" content="index, follow" />
-        <meta
-          property="og:title"
-          content="Γεωγραφία Ελλάδας — Περιφέρειες & Νομοί | GeoMix"
-        />
-        <meta
-          property="og:description"
-          content="Οδηγός για τις 13 περιφέρειες και τους 74 νομούς της Ελλάδας με πρωτεύουσες και γεωγραφικά στοιχεία."
-        />
+        <meta property="og:title" content={t(`${k}.og_title`)} />
+        <meta property="og:description" content={t(`${k}.og_desc`)} />
         <meta property="og:type" content="article" />
-        <meta property="og:locale" content="el_GR" />
+        <meta property="og:locale" content={t("common.og_locale")} />
         <link rel="canonical" href="https://geomix.gr/learn/greece" />
       </Head>
 
@@ -49,83 +54,39 @@ export default function LearnGreecePage() {
         <SiteNav />
 
         <main className="max-w-3xl mx-auto px-6 py-16">
-          {/* Breadcrumb */}
           <nav className="text-xs text-slate-500 mb-8 flex items-center gap-2">
-            <Link
-              href="/learn"
-              className="hover:text-slate-300 transition-colors"
-            >
-              Μάθε Γεωγραφία
+            <Link href="/learn" className="hover:text-slate-300 transition-colors">
+              {t("learn.title")}
             </Link>
             <span>›</span>
-            <span className="text-slate-400">Ελλάδα</span>
+            <span className="text-slate-400">{t("learn.articles.greece.title")}</span>
           </nav>
 
           <div className="flex items-center gap-3 mb-6">
             <span className="text-4xl">🇬🇷</span>
-            <h1 className="text-4xl font-extrabold text-slate-100">
-              Γεωγραφία Ελλάδας
-            </h1>
+            <h1 className="text-4xl font-extrabold text-slate-100">{t("learn.articles.greece.title")}</h1>
           </div>
 
-          <p className="text-slate-400 text-lg leading-relaxed mb-12">
-            Η Ελλάδα είναι χώρα στη νοτιοανατολική Ευρώπη με έκταση{" "}
-            <strong className="text-slate-300">131.957 τ.χλμ.</strong> και
-            πληθυσμό περίπου{" "}
-            <strong className="text-slate-300">10,7 εκατομμυρίων</strong>{" "}
-            κατοίκων. Η χώρα διαιρείται σε{" "}
-            <strong className="text-slate-300">
-              13 διοικητικές περιφέρειες
-            </strong>{" "}
-            και <strong className="text-slate-300">74 νομούς</strong>.
-          </p>
+          <p className="text-slate-400 text-lg leading-relaxed mb-12">{t(`${k}.intro`)}</p>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4 text-slate-100">
-              Γεωγραφική Εισαγωγή
-            </h2>
-            <p className="text-slate-400 leading-relaxed mb-4">
-              Η Ελλάδα βρίσκεται στη νότια άκρη της Βαλκανικής Χερσονήσου.
-              Συνορεύει στα βορειοανατολικά με τη Βουλγαρία και την Τουρκία, στα
-              βόρεια με τη Βόρεια Μακεδονία και στα βορειοδυτικά με την Αλβανία.
-              Πλένεται από τρεις θάλασσες: το Αιγαίο Πέλαγος, το Ιόνιο Πέλαγος
-              και τη Μεσόγειο Θάλασσα.
-            </p>
-            <p className="text-slate-400 leading-relaxed mb-4">
-              Χαρακτηριστικό γνώρισμα της ελληνικής γεωγραφίας είναι η{" "}
-              <strong className="text-slate-300">νησιωτικότητα</strong>: η χώρα
-              διαθέτει περισσότερα από{" "}
-              <strong className="text-slate-300">6.000 νησιά</strong>, εκ των
-              οποίων κατοικούνται περίπου 227. Τα μεγαλύτερα νησιά είναι η
-              Κρήτη, η Εύβοια, η Λέσβος, η Ρόδος και η Χίος.
-            </p>
-            <p className="text-slate-400 leading-relaxed">
-              Το ψηλότερο βουνό της Ελλάδας είναι ο{" "}
-              <strong className="text-slate-300">Όλυμπος</strong> με υψόμετρο
-              2.918 μέτρων, ενώ ο μεγαλύτερος ποταμός είναι ο Αλιάκμονας. Η
-              ακτογραμμή της Ελλάδας, σε συνδυασμό με τα νησιά, αγγίζει τα{" "}
-              <strong className="text-slate-300">16.000 χιλιόμετρα</strong> —
-              από τις μακρύτερες στην Ευρώπη.
-            </p>
+            <h2 className="text-2xl font-bold mb-4 text-slate-100">{t("learn.geography_intro")}</h2>
+            <p className="text-slate-400 leading-relaxed mb-4">{t(`${k}.geo_p1`)}</p>
+            <p className="text-slate-400 leading-relaxed mb-4">{t(`${k}.geo_p2`)}</p>
+            <p className="text-slate-400 leading-relaxed">{t(`${k}.geo_p3`)}</p>
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 text-slate-100">
-              Οι 13 Περιφέρειες της Ελλάδας
-            </h2>
-            <p className="text-slate-400 leading-relaxed mb-6">
-              Από το 2011 (Πρόγραμμα Καλλικράτης), η Ελλάδα διαιρείται σε 13
-              περιφέρειες. Κάθε περιφέρεια έχει εκλεγμένο περιφερειάρχη και
-              περιφερειακό συμβούλιο.
-            </p>
+            <h2 className="text-2xl font-bold mb-4 text-slate-100">{t(`${k}.regions_title`)}</h2>
+            <p className="text-slate-400 leading-relaxed mb-6">{t(`${k}.regions_subtitle`)}</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {REGIONS.map((r) => (
+              {regions.map((r) => (
                 <div
-                  key={r.name}
+                  key={r.id}
                   className="bg-slate-900 border border-slate-800 rounded-lg px-4 py-3 flex items-center justify-between"
                 >
                   <span className="text-slate-200 text-sm font-medium">
-                    {r.name}
+                    {isEn ? r.name_en : r.name}
                   </span>
                   <span className="text-slate-500 text-xs">{r.capital}</span>
                 </div>
@@ -134,41 +95,16 @@ export default function LearnGreecePage() {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4 text-slate-100">
-              Σημαντικές Πόλεις
-            </h2>
-            <p className="text-slate-400 leading-relaxed mb-4">
-              Η <strong className="text-slate-300">Αθήνα</strong> είναι η
-              πρωτεύουσα και μεγαλύτερη πόλη της Ελλάδας, με μητροπολιτικό
-              πληθυσμό που ξεπερνά τα 3,5 εκατομμύρια. Είναι ένα από τα
-              αρχαιότερα κατοικημένα μέρη στον κόσμο — η ιστορία της εκτείνεται
-              σε βάθος 3.400 ετών.
-            </p>
-            <p className="text-slate-400 leading-relaxed mb-4">
-              Η <strong className="text-slate-300">Θεσσαλονίκη</strong>, δεύτερη
-              μεγαλύτερη πόλη, είναι το πολιτιστικό και εμπορικό κέντρο της
-              Βόρειας Ελλάδας. Άλλες σημαντικές πόλεις είναι η Πάτρα (τρίτη σε
-              μέγεθος), το Ηράκλειο (πρωτεύουσα Κρήτης), η Λάρισα (κέντρο
-              Θεσσαλίας) και τα Ιωάννινα (κέντρο Ηπείρου).
-            </p>
+            <h2 className="text-2xl font-bold mb-4 text-slate-100">{t(`${k}.cities_title`)}</h2>
+            <p className="text-slate-400 leading-relaxed mb-4">{t(`${k}.cities_p1`)}</p>
+            <p className="text-slate-400 leading-relaxed">{t(`${k}.cities_p2`)}</p>
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4 text-slate-100">
-              Fun Facts
-            </h2>
+            <h2 className="text-2xl font-bold mb-4 text-slate-100">{t("learn.interesting_facts")}</h2>
             <ul className="space-y-3">
-              {[
-                "Η Ελλάδα έχει τη μεγαλύτερη ακτογραμμή στη Μεσόγειο και την 11η μεγαλύτερη στον κόσμο.",
-                "Το ελληνικό αλφάβητο είναι ένα από τα αρχαιότερα που χρησιμοποιούνται μέχρι σήμερα — αποτελεί τη βάση του λατινικού και κυριλλικού αλφαβήτου.",
-                "Περίπου το 80% της Ελλάδας καλύπτεται από βουνά ή λόφους — είναι μία από τις πιο ορεινές χώρες της Ευρώπης.",
-                "Η Ελλάδα φιλοξένησε τους πρώτους σύγχρονους Ολυμπιακούς Αγώνες το 1896 στην Αθήνα.",
-                "Ο Άγιος Όρος (Άθως) στη Χαλκιδική είναι αυτόνομη μοναστική κοινότητα και μνημείο UNESCO.",
-              ].map((fact, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-3 text-slate-400 text-sm leading-relaxed"
-                >
+              {(t(`${k}.facts`, { returnObjects: true }) as string[]).map((fact, i) => (
+                <li key={i} className="flex items-start gap-3 text-slate-400 text-sm leading-relaxed">
                   <span className="text-blue-400 shrink-0 mt-0.5">→</span>
                   <span>{fact}</span>
                 </li>
@@ -176,54 +112,21 @@ export default function LearnGreecePage() {
             </ul>
           </section>
 
-          {/* Quiz CTA */}
           <div className="bg-slate-900 border border-slate-700/60 rounded-2xl p-6">
-            <h3 className="font-bold text-slate-100 mb-2">
-              Δοκίμασε τις γνώσεις σου!
-            </h3>
-            <p className="text-slate-400 text-sm mb-4">
-              Τώρα που διάβασες για τη γεωγραφία της Ελλάδας, είσαι έτοιμος για
-              το κουίζ;
-            </p>
+            <h3 className="font-bold text-slate-100 mb-2">{t("learn.try_quiz")}</h3>
+            <p className="text-slate-400 text-sm mb-4">{t(`${k}.quiz_subtitle`)}</p>
             <div className="flex flex-wrap gap-3">
-              <Link
-                href="/quiz"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-semibold transition-colors"
-              >
-                🗺️ Περιφέρειες Ελλάδας
+              <Link href="/quiz" className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-semibold transition-colors">
+                🗺️ {t("learn.articles.greece.title")}
               </Link>
-              <Link
-                href="/quiz/nomoi"
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm font-semibold transition-colors"
-              >
-                📍 Νομοί Ελλάδας
+              <Link href="/quiz/nomoi" className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm font-semibold transition-colors">
+                📍 {t("games.nomoi.title")}
               </Link>
             </div>
           </div>
         </main>
 
-        <footer className="border-t border-slate-800 mt-8">
-          <div className="max-w-4xl mx-auto px-6 py-6 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-600">
-            <span>
-              © {new Date().getFullYear()} GeoMix · Δωρεάν εκπαιδευτική
-              πλατφόρμα γεωγραφίας
-            </span>
-            <div className="flex gap-4">
-              <Link
-                href="/privacy-policy"
-                className="hover:text-slate-400 transition-colors"
-              >
-                Πολιτική Απορρήτου
-              </Link>
-              <Link
-                href="/terms"
-                className="hover:text-slate-400 transition-colors"
-              >
-                Όροι Χρήσης
-              </Link>
-            </div>
-          </div>
-        </footer>
+        <SiteFooter />
       </div>
     </>
   );

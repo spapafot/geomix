@@ -25,6 +25,8 @@ import L, {
 } from "leaflet";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
+import "@/lib/i18n";
 import type { RegionProperties, Question } from "@/lib/loadData";
 
 type AccentColor = "blue" | "violet" | "emerald" | "yellow" | "cyan" | "amber" | "orange" | "red" | "sky" | "indigo" | "rose" | "lime" | "teal" | "pink";
@@ -91,6 +93,8 @@ export default function MapQuizLeaflet({
   accentColor = "blue",
 }: MapQuizLeafletProps) {
   const router = useRouter();
+  const { t, i18n } = useTranslation();
+  const isEn = i18n.language === "en";
   const mapRef = useRef<LeafletMap | null>(null);
   const geoLayerRef = useRef<LeafletGeoJSON | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null); // the leaflet root (absolute inset-0)
@@ -135,8 +139,9 @@ export default function MapQuizLeaflet({
   const currentQuestion = questions[currentIndex];
 
   const getRegionName = (id: string): string => {
-    const f = geojson.features.find((ft) => ft.properties.id === id);
-    return f?.properties.name ?? id;
+    const props = geojson.features.find((ft) => ft.properties.id === id)?.properties;
+    if (!props) return id;
+    return (isEn ? props.name_en : undefined) ?? props.name ?? id;
   };
 
   const applyStyles = (
@@ -372,7 +377,7 @@ export default function MapQuizLeaflet({
           onClick={() => router.push("/")}
           className="absolute top-4 left-4 z-1000 flex items-center gap-1.5 text-xs text-slate-400 hover:text-white bg-slate-900/80 backdrop-blur-sm border border-slate-700/60 rounded-lg px-3 py-1.5 transition-colors"
         >
-          ← Αρχική
+          ← {t("quiz.back_home")}
         </button>
       </div>
 
@@ -402,7 +407,7 @@ export default function MapQuizLeaflet({
                   : "bg-slate-800 text-slate-400 hover:text-slate-200"
               }`}
             >
-              🎯 Κουίζ
+              🎯 {t("quiz.mode_quiz")}
             </button>
             <button
               onClick={() => switchMode("relax")}
@@ -412,7 +417,7 @@ export default function MapQuizLeaflet({
                   : "bg-slate-800 text-slate-400 hover:text-slate-200"
               }`}
             >
-              🔍 Εξερεύνηση
+              🔍 {t("quiz.mode_relax")}
             </button>
           </div>
 
@@ -452,16 +457,18 @@ export default function MapQuizLeaflet({
                         />
                       )}
                       <div>
-                        <h2 className="text-2xl font-bold text-white leading-tight">{p?.name}</h2>
-                        {p?.capital && (
+                        <h2 className="text-2xl font-bold text-white leading-tight">
+                          {(isEn ? p?.name_en : undefined) ?? p?.name}
+                        </h2>
+                        {(p?.capital || p?.capital_en) && (
                           <div className="flex items-center gap-2 mt-2 text-slate-300 text-sm">
                             <span>🏛️</span>
-                            <span>{p.capital}</span>
+                            <span>{(isEn ? p?.capital_en : undefined) ?? p?.capital}</span>
                           </div>
                         )}
                       </div>
                       <p className="text-xs text-slate-600 mt-auto">
-                        Κάνε κλικ σε άλλη περιοχή για να συνεχίσεις
+                        {t("quiz.click_map")}
                       </p>
                     </motion.div>
                   );
@@ -475,7 +482,7 @@ export default function MapQuizLeaflet({
                 >
                   <span className="text-4xl">🗺️</span>
                   <p className="text-slate-400 text-sm leading-relaxed">
-                    Κάνε κλικ σε μια περιοχή για να δεις το όνομα, τη σημαία και την πρωτεύουσά της
+                    {t("quiz.click_map")}
                   </p>
                 </motion.div>
               )}
@@ -499,22 +506,22 @@ export default function MapQuizLeaflet({
                     {score === questions.length ? "🏆" : score >= questions.length / 2 ? "🎉" : "📚"}
                   </div>
                   <p className="text-2xl font-bold">
-                    {score === questions.length ? "Τέλειο!" : `${score} / ${questions.length} σωστά`}
+                    {score === questions.length ? "🏆" : `${score} / ${questions.length} ${t("quiz.correct_answers")}`}
                   </p>
                   <p className="text-slate-400 text-sm">
-                    {score === questions.length ? "Άριστη γνώση!" : "Συνέχισε να εξασκείσαι!"}
+                    {t("quiz.quiz_complete")}
                   </p>
                   <button
                     onClick={handleRestart}
                     className={`mt-2 px-6 py-2.5 ${accent.btn} rounded-xl font-semibold transition-colors text-sm`}
                   >
-                    Παίξε Ξανά
+                    {t("quiz.play_again")}
                   </button>
                   <button
                     onClick={() => router.push("/")}
                     className="text-xs text-slate-500 hover:text-slate-300 transition-colors"
                   >
-                    ← Επιλογή παιχνιδιού
+                    ← {t("quiz.back_home")}
                   </button>
                 </motion.div>
               ) : (
@@ -527,10 +534,10 @@ export default function MapQuizLeaflet({
                   className="flex flex-col gap-3"
                 >
                   <p className="text-[10px] uppercase tracking-widest text-slate-500 font-medium">
-                    Ερώτηση {currentIndex + 1} από {questions.length}
+                    {t("quiz.question")} {currentIndex + 1} {t("quiz.of")} {questions.length}
                   </p>
                   <p className="text-lg font-semibold text-slate-100 leading-snug">
-                    {currentQuestion.prompt}
+                    {(isEn ? currentQuestion.prompt_en : undefined) ?? currentQuestion.prompt}
                   </p>
                   {currentQuestion.image_url && (
                     <img
@@ -539,7 +546,7 @@ export default function MapQuizLeaflet({
                       className="h-12 w-auto rounded shadow-md border border-slate-700/60 self-start"
                     />
                   )}
-                  <p className="text-xs text-slate-500">Κάνε κλικ στον χάρτη</p>
+                  <p className="text-xs text-slate-500">{t("quiz.click_map")}</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -562,18 +569,18 @@ export default function MapQuizLeaflet({
                   <div className="flex items-center gap-2">
                     <span className="text-2xl">{feedback === "correct" ? "✅" : "❌"}</span>
                     <span className={`font-bold text-base ${feedback === "correct" ? "text-green-300" : "text-red-300"}`}>
-                      {feedback === "correct" ? "Σωστό!" : "Λάθος!"}
+                      {feedback === "correct" ? t("quiz.correct") : t("quiz.wrong")}
                     </span>
                   </div>
 
                   {feedback === "wrong" && lastClickedId && (
                     <div className="flex flex-col gap-1.5 text-xs border-t border-red-500/20 pt-2.5">
                       <div className="flex items-center gap-2">
-                        <span className="text-slate-500 shrink-0 w-32">Απάντησες:</span>
+                        <span className="text-slate-500 shrink-0 w-32">{t("quiz.you_answered")}</span>
                         <span className="text-red-300 font-medium">{getRegionName(lastClickedId)}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-slate-500 shrink-0 w-32">Σωστή απάντηση:</span>
+                        <span className="text-slate-500 shrink-0 w-32">{t("quiz.correct_answer")}</span>
                         <span className="text-green-300 font-medium">{getRegionName(currentQuestion.answer)}</span>
                       </div>
                     </div>
@@ -583,7 +590,7 @@ export default function MapQuizLeaflet({
                   <button
                     onClick={handleNext}
                     className="relative w-full h-8 rounded-lg overflow-hidden bg-slate-700/60 hover:bg-slate-700 transition-colors group"
-                    title="Κλικ για να συνεχίσεις"
+                    title={t("quiz.next")}
                   >
                     <motion.div
                       className={`absolute inset-y-0 left-0 ${feedback === "correct" ? "bg-green-500/50" : "bg-red-500/50"}`}
@@ -592,7 +599,7 @@ export default function MapQuizLeaflet({
                       transition={{ duration: AUTO_ADVANCE_MS / 1000, ease: "linear" }}
                     />
                     <span className="relative z-10 text-xs font-semibold text-slate-300 group-hover:text-white transition-colors">
-                      {currentIndex + 1 >= questions.length ? "Δες Αποτελέσματα →" : "Επόμενη →"}
+                      {currentIndex + 1 >= questions.length ? t("quiz.see_results") : t("quiz.next_question")}
                     </span>
                   </button>
                 </motion.div>
